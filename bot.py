@@ -52,7 +52,7 @@ def main() -> None:
     """Основная функция запуска бота."""
     logger.info("Запуск бота...")
 
-    if BOT_TOKEN == "7588965175:AAEorKSyas6prFbVf01hf83vLbHsci75p9s":
+    if BOT_TOKEN == " ":
         logger.error("Ошибка: Не указан BOT_TOKEN! Пожалуйста, вставьте ваш API токен.")
         return # Выходим, если токен не указан
 

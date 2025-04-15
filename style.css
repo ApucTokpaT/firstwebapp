@@ -1,77 +1,161 @@
-body {
-    font-family: sans-serif; /* Пока оставим, шрифты ниже */
-    padding: 20px;
-    margin: 0; /* Убираем отступы по умолчанию */
-    min-height: 100vh; /* Чтобы фон занимал весь экран */
-
-    /* --- Градиентный фон --- */
-    /* Простой пример градиента */
-    /* background: linear-gradient(135deg, #ece9e6 0%, #ffffff 100%); */
-
-    /* Градиент, использующий цвета темы Telegram (если JS их установит) */
-    /* Задаем базовые цвета на случай, если JS не отработает */
+/* --- Базовые настройки и переменные для темы --- */
+:root {
+    /* Цвета по умолчанию (если JS не сможет получить тему Telegram) */
     --tg-theme-bg-color: #ffffff;
-    --tg-theme-secondary-bg-color: #f3f3f3; /* Добавим второй цвет для градиента */
-    background: linear-gradient(135deg, var(--tg-theme-secondary-bg-color) 0%, var(--tg-theme-bg-color) 100%);
-    color: var(--tg-theme-text-color, #000000); /* Цвет текста из темы */
+    --tg-theme-text-color: #212529;
+    --tg-theme-hint-color: #6c757d;
+    --tg-theme-link-color: #0d6efd;
+    --tg-theme-button-color: #0d6efd;
+    --tg-theme-button-text-color: #ffffff;
+    --tg-theme-secondary-bg-color: #f8f9fa; /* Светло-серый для градиента по умолчанию */
 
-    display: flex; /* Используем flex для центрирования контента (опционально) */
-    flex-direction: column;
-    align-items: center; /* Центрируем по горизонтали */
-    justify-content: center; /* Центрируем по вертикали */
-    text-align: center; /* Центрируем текст внутри блоков */
+    /* Цвета для темной темы по умолчанию */
+    --tg-theme-dark-bg-color: #212529;
+    --tg-theme-dark-text-color: #dee2e6;
+    --tg-theme-dark-hint-color: #adb5bd;
+    --tg-theme-dark-link-color: #6ea8fe;
+    --tg-theme-dark-button-color: #0d6efd;
+    --tg-theme-dark-button-text-color: #ffffff;
+    --tg-theme-dark-secondary-bg-color: #343a40; /* Темно-серый для градиента */
 }
 
-/* Добавим контейнер для контента, чтобы он не растягивался на всю ширину */
+/* Применение цветов для темной темы, если JS добавит класс .dark */
+body.dark {
+    --tg-theme-bg-color: var(--tg-theme-dark-bg-color);
+    --tg-theme-text-color: var(--tg-theme-dark-text-color);
+    --tg-theme-hint-color: var(--tg-theme-dark-hint-color);
+    --tg-theme-link-color: var(--tg-theme-dark-link-color);
+    --tg-theme-button-color: var(--tg-theme-dark-button-color);
+    --tg-theme-button-text-color: var(--tg-theme-dark-button-text-color);
+    --tg-theme-secondary-bg-color: var(--tg-theme-dark-secondary-bg-color);
+}
+
+/* --- Стили Body --- */
+body {
+    font-family: 'Poppins', sans-serif; /* Новый основной шрифт */
+    margin: 0;
+    padding: 0; /* Убираем padding у body, он будет у контейнера */
+    min-height: 100vh;
+    box-sizing: border-box; /* Учитываем padding и border в размерах */
+
+    /* Заметный градиентный фон */
+    background: linear-gradient(145deg, var(--tg-theme-secondary-bg-color) 0%, var(--tg-theme-bg-color) 70%);
+    background-attachment: fixed; /* Фиксируем фон */
+    color: var(--tg-theme-text-color);
+
+    /* Центрирование контейнера */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+/* --- Контейнер для контента --- */
 .content-wrapper {
-    background-color: rgba(255, 255, 255, 0.8); /* Полупрозрачный белый фон для читаемости */
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    max-width: 500px; /* Ограничим максимальную ширину */
-    width: 90%; /* На мобильных будет почти на всю ширину */
+    background-color: rgba(var(--tg-theme-bg-color-rgb, 255, 255, 255), 0.85); /* Полупрозрачный фон на основе темы */
+    /* Требуется JS для установки --tg-theme-bg-color-rgb */
+    backdrop-filter: blur(5px); /* Эффект размытия фона под контейнером (если поддерживается) */
+    padding: 40px 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    max-width: 550px;
+    width: 90%;
+    border: 1px solid rgba(var(--tg-theme-text-color-rgb, 0, 0, 0), 0.1); /* Тонкая рамка */
+
+    /* Анимация появления */
+    opacity: 0; /* Начинаем невидимым */
+    transform: translateY(20px); /* Начинаем чуть ниже */
+    animation: fadeInSlideUp 0.8s 0.2s ease-out forwards; /* Имя, длительность, задержка, плавность, конечное состояние */
 }
 
-/* Стили для заголовка и параграфа внутри контейнера */
-.content-wrapper h1 {
+/* --- Стили текста --- */
+h1 {
+    font-family: 'Raleway', sans-serif; /* Новый шрифт для заголовка */
+    font-weight: 700; /* Жирный */
+    font-size: 2.5em; /* Крупнее */
     margin-top: 0;
-    color: var(--tg-theme-text-color, #000000);
-    font-weight: 600; /* Сделаем заголовок жирнее */
+    margin-bottom: 15px;
+    color: var(--tg-theme-text-color);
+    letter-spacing: 1px; /* Небольшое разрежение букв */
 }
 
-.content-wrapper p {
-    color: var(--tg-theme-hint-color, #555555); /* Используем hint_color для описания */
-    line-height: 1.6; /* Улучшим читаемость текста */
+p {
+    font-size: 1.1em;
+    line-height: 1.7;
+    color: var(--tg-theme-hint-color);
+    margin-bottom: 25px;
 }
 
 #user-info {
+    font-size: 1em;
+    font-weight: 600; /* Жирнее */
     margin-top: 20px;
-    font-weight: 500;
-    color: var(--tg-theme-text-color, #000000);
+    color: var(--tg-theme-text-color);
+    padding: 10px;
+    background-color: rgba(var(--tg-theme-secondary-bg-color-rgb, 240, 240, 240), 0.5); /* Легкий фон */
+    border-radius: 5px;
+    display: inline-block; /* Чтобы фон не растягивался */
 }
 
-/* Стили кнопок (можно использовать Bootstrap или свои) */
+/* --- Контейнер для кнопок --- */
+.button-container {
+    margin-top: 30px;
+}
+
+/* --- Стили кнопок --- */
 button {
-    padding: 12px 20px;
-    margin-right: 10px;
-    margin-top: 25px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600; /* Жирнее */
+    font-size: 1em;
+    padding: 12px 25px;
+    margin: 5px 10px; /* Отступы между кнопками */
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    font-size: 16px;
-    font-weight: 500;
-    background-color: var(--tg-theme-button-color, #4a9cec);
-    color: var(--tg-theme-button-text-color, #ffffff);
-    transition: background-color 0.3s ease, transform 0.2s ease; /* Плавность для анимации */
-     visibility: hidden; /* Скрыты по умолчанию, пока JS не покажет */
+    background-color: var(--tg-theme-button-color);
+    color: var(--tg-theme-button-text-color);
+    box-shadow: 0 4px 10px rgba(var(--tg-theme-button-color-rgb, 13, 110, 253), 0.3); /* Тень в цвет кнопки */
+    transition: all 0.3s ease; /* Плавный переход для всех свойств */
+
+    /* Анимация появления кнопок */
+    opacity: 0; /* Изначально невидимы */
+    transform: translateY(10px); /* Начинаем чуть ниже */
+    animation: fadeInSlideUp 0.6s 0.6s ease-out forwards; /* Задержка 0.6s */
 }
 
 button:hover {
-     /* Немного светлее при наведении (можно использовать JS для расчета цвета) */
-    filter: brightness(1.1);
-    transform: translateY(-2px); /* Небольшой подъем при наведении */
+    filter: brightness(1.1); /* Немного ярче */
+    box-shadow: 0 6px 15px rgba(var(--tg-theme-button-color-rgb, 13, 110, 253), 0.4);
+    transform: translateY(-3px) scale(1.02); /* Подъем и легкое увеличение */
 }
+
 button:active {
-     transform: translateY(0px); /* Возврат при нажатии */
-     filter: brightness(0.95);
+    filter: brightness(0.95);
+    transform: translateY(-1px) scale(1); /* Небольшой сдвиг при нажатии */
+    box-shadow: 0 2px 5px rgba(var(--tg-theme-button-color-rgb, 13, 110, 253), 0.3);
+}
+
+/* Если одна из кнопок должна быть "вторичной" */
+#close-btn {
+    background-color: var(--tg-theme-hint-color); /* Серый цвет */
+     box-shadow: 0 4px 10px rgba(var(--tg-theme-hint-color-rgb, 108, 117, 125), 0.3);
+}
+#close-btn:hover {
+     box-shadow: 0 6px 15px rgba(var(--tg-theme-hint-color-rgb, 108, 117, 125), 0.4);
+}
+ #close-btn:active {
+     box-shadow: 0 2px 5px rgba(var(--tg-theme-hint-color-rgb, 108, 117, 125), 0.3);
+}
+
+
+/* --- Ключевые кадры для анимации --- */
+@keyframes fadeInSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px); /* Начинаем ниже */
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0); /* Поднимаемся на место */
+    }
 }

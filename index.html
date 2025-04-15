@@ -1,12 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Alex TG Web App</title>
+
+    <!-- Подключение шрифтов (Poppins и Raleway) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Raleway:wght@700&display=swap" rel="stylesheet">
+
+    <!-- Подключение стилей -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Скрипт Telegram Web App (ОБЯЗАТЕЛЬНО ПЕРЕД ВАШИМ script.js) -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
 <body>
+    <!-- Контейнер для основного контента -->
     <div class="content-wrapper">
-        <h1>Привет!</h1>
-        <p>Это веб-приложение Telegram. Нажмите кнопку, чтобы взаимодействовать с ботом.</p>
-        <div id="user-info">Загрузка...</div>
-        <div> <!-- Обертка для кнопок -->
-            <button id="send-data-btn">Отправить данные</button>
+        <h1>Добро пожаловать!</h1>
+        <p>Это обновленное веб-приложение Telegram с улучшенным дизайном.</p>
+
+        <div id="user-info">Загрузка данных пользователя...</div>
+
+        <!-- Обертка для кнопок -->
+        <div class="button-container">
+            <button id="send-data-btn">Отправить Пример</button>
             <button id="close-btn">Закрыть</button>
         </div>
     </div>
-    <!-- ... скрипты ... -->
+
+    <!-- Ваш скрипт логики -->
+    <script src="script.js"></script>
 </body>
+</html>

@@ -1,25 +1,77 @@
 body {
-    font-family: sans-serif;
-    padding: 15px;
-    /* Цвета будут переопределены из JS на основе темы Telegram */
+    font-family: sans-serif; /* Пока оставим, шрифты ниже */
+    padding: 20px;
+    margin: 0; /* Убираем отступы по умолчанию */
+    min-height: 100vh; /* Чтобы фон занимал весь экран */
+
+    /* --- Градиентный фон --- */
+    /* Простой пример градиента */
+    /* background: linear-gradient(135deg, #ece9e6 0%, #ffffff 100%); */
+
+    /* Градиент, использующий цвета темы Telegram (если JS их установит) */
+    /* Задаем базовые цвета на случай, если JS не отработает */
+    --tg-theme-bg-color: #ffffff;
+    --tg-theme-secondary-bg-color: #f3f3f3; /* Добавим второй цвет для градиента */
+    background: linear-gradient(135deg, var(--tg-theme-secondary-bg-color) 0%, var(--tg-theme-bg-color) 100%);
+    color: var(--tg-theme-text-color, #000000); /* Цвет текста из темы */
+
+    display: flex; /* Используем flex для центрирования контента (опционально) */
+    flex-direction: column;
+    align-items: center; /* Центрируем по горизонтали */
+    justify-content: center; /* Центрируем по вертикали */
+    text-align: center; /* Центрируем текст внутри блоков */
 }
 
-h1 {
+/* Добавим контейнер для контента, чтобы он не растягивался на всю ширину */
+.content-wrapper {
+    background-color: rgba(255, 255, 255, 0.8); /* Полупрозрачный белый фон для читаемости */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    max-width: 500px; /* Ограничим максимальную ширину */
+    width: 90%; /* На мобильных будет почти на всю ширину */
+}
+
+/* Стили для заголовка и параграфа внутри контейнера */
+.content-wrapper h1 {
     margin-top: 0;
+    color: var(--tg-theme-text-color, #000000);
+    font-weight: 600; /* Сделаем заголовок жирнее */
 }
 
-button {
-    padding: 10px 15px;
-    margin-right: 10px;
-    margin-top: 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    /* Пример использования переменных темы (если JS не сработает) */
-    background-color: var(--tg-theme-button-color, #4a9cec); /* Цвет кнопки Telegram по умолчанию */
-    color: var(--tg-theme-button-text-color, #ffffff); /* Цвет текста кнопки Telegram по умолчанию */
+.content-wrapper p {
+    color: var(--tg-theme-hint-color, #555555); /* Используем hint_color для описания */
+    line-height: 1.6; /* Улучшим читаемость текста */
 }
-/* Скроем кнопки по умолчанию, пока JS не определит наличие пользователя */
-#send-data-btn, #close-btn {
-    visibility: hidden;
+
+#user-info {
+    margin-top: 20px;
+    font-weight: 500;
+    color: var(--tg-theme-text-color, #000000);
+}
+
+/* Стили кнопок (можно использовать Bootstrap или свои) */
+button {
+    padding: 12px 20px;
+    margin-right: 10px;
+    margin-top: 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    background-color: var(--tg-theme-button-color, #4a9cec);
+    color: var(--tg-theme-button-text-color, #ffffff);
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Плавность для анимации */
+     visibility: hidden; /* Скрыты по умолчанию, пока JS не покажет */
+}
+
+button:hover {
+     /* Немного светлее при наведении (можно использовать JS для расчета цвета) */
+    filter: brightness(1.1);
+    transform: translateY(-2px); /* Небольшой подъем при наведении */
+}
+button:active {
+     transform: translateY(0px); /* Возврат при нажатии */
+     filter: brightness(0.95);
 }

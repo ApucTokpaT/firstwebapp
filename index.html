@@ -1,21 +1,12 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no"> <!-- Важно для мобильных -->
-    <title>Мое TG Веб-Приложение</title>
-    <link rel="stylesheet" href="style.css">
-    <!-- !!! Подключение скрипта Telegram Web App !!! -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-</head>
 <body>
-    <h1>Привет из Ubuntu + VS Code!</h1>
-    <p>Это базовое веб-приложение Telegram.</p>
-
-    <div id="user-info">Загрузка...</div>
-    <button id="send-data-btn">Отправить данные</button>
-    <button id="close-btn">Закрыть</button>
-
-    <script src="script.js"></script>
+    <div class="content-wrapper">
+        <h1>Привет!</h1>
+        <p>Это веб-приложение Telegram. Нажмите кнопку, чтобы взаимодействовать с ботом.</p>
+        <div id="user-info">Загрузка...</div>
+        <div> <!-- Обертка для кнопок -->
+            <button id="send-data-btn">Отправить данные</button>
+            <button id="close-btn">Закрыть</button>
+        </div>
+    </div>
+    <!-- ... скрипты ... -->
 </body>
-</html>

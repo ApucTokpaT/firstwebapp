@@ -1,0 +1,25 @@
+body {
+    font-family: sans-serif;
+    padding: 15px;
+    /* Цвета будут переопределены из JS на основе темы Telegram */
+}
+
+h1 {
+    margin-top: 0;
+}
+
+button {
+    padding: 10px 15px;
+    margin-right: 10px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    /* Пример использования переменных темы (если JS не сработает) */
+    background-color: var(--tg-theme-button-color, #4a9cec); /* Цвет кнопки Telegram по умолчанию */
+    color: var(--tg-theme-button-text-color, #ffffff); /* Цвет текста кнопки Telegram по умолчанию */
+}
+/* Скроем кнопки по умолчанию, пока JS не определит наличие пользователя */
+#send-data-btn, #close-btn {
+    visibility: hidden;
+}

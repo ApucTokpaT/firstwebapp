@@ -340,21 +340,17 @@ function initializeApp() {
              }
              if (editingIndex !== null) cancelEdit(); // Отменяем редактирование
 
-             // --- ИЗМЕНЕНИЕ ACTION ЗДЕСЬ ---
              const dataToSend = JSON.stringify({
                  action: "send_tasks_to_user", // Указываем боту на пересылку
                  tasks: tasks,
                  timestamp: new Date().toISOString()
              });
-             // -------------------------------
 
              console.log("Sending data to bot for forwarding:", dataToSend);
              try {
                  tg.sendData(dataToSend); // Отправляем данные боту
                  tg.HapticFeedback.notificationOccurred('success');
-                 // --- ИЗМЕНЕНИЕ СООБЩЕНИЯ ЗДЕСЬ ---
                  tg.showAlert("Задачи отправлены боту для пересылки вам!");
-                 // ----------------------------------
              } catch (e) {
                  console.error("Error sending data:", e);
                  tg.showAlert("Ошибка отправки запроса боту.");

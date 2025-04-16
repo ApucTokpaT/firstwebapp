@@ -1,8 +1,7 @@
 /* --- Базовые настройки и переменные для темы --- */
 :root {
-    /* Цвета всё еще нужны для текста, кнопок и т.д. */
-    /* Светлая тема */
-    --tg-theme-bg-color: #000010; /* Фон теперь всегда темный для звезд */
+    /* Цвета для текста, кнопок и т.д. */
+    --tg-theme-bg-color: #000010; /* Фон всегда темный для звезд */
     --tg-theme-text-color: #E0E0E0; /* Светлый текст для темного фона */
     --tg-theme-hint-color: #a5acb5;
     --tg-theme-link-color: #6ea8fe;
@@ -15,73 +14,52 @@
     --tg-theme-hint-color-rgb: 165, 172, 181;
     --tg-theme-button-color-rgb: 46, 125, 219;
     --tg-theme-secondary-bg-color-rgb: 33, 40, 49; /* Для непрозрачных версий */
-
-    /* Темная тема (мало отличий, т.к. фон всегда темный) */
-    --tg-theme-dark-bg-color: #000010;
-    --tg-theme-dark-text-color: #ffffff;
-    --tg-theme-dark-hint-color: #adb5bd;
-    --tg-theme-dark-link-color: #7aaaff;
-    --tg-theme-dark-button-color: #3a86ff;
-    --tg-theme-dark-button-text-color: #ffffff;
-    --tg-theme-dark-secondary-bg-color: rgba(40, 48, 56, 0.9); /* Чуть плотнее */
-    /* RGB */
-    --tg-theme-dark-bg-color-rgb: 0, 0, 16;
-    --tg-theme-dark-text-color-rgb: 255, 255, 255;
-    --tg-theme-dark-hint-color-rgb: 173, 181, 189;
-    --tg-theme-dark-button-color-rgb: 58, 134, 255;
-    --tg-theme-dark-secondary-bg-color-rgb: 40, 48, 56;
 }
 
-/* --- Применение цветов для темной темы --- */
-/* Тело всегда темное, но класс dark может влиять на другие элементы */
+/* --- Применение цветов для темной темы (минимальные изменения от TG) --- */
 body.dark {
-    /* Переопределяем основные переменные, если TG прислал темную тему */
-    --tg-theme-text-color: var(--tg-theme-dark-text-color);
-    --tg-theme-hint-color: var(--tg-theme-dark-hint-color);
-    --tg-theme-link-color: var(--tg-theme-dark-link-color);
-    --tg-theme-button-color: var(--tg-theme-dark-button-color);
-    --tg-theme-button-text-color: var(--tg-theme-dark-button-text-color);
-    --tg-theme-secondary-bg-color: var(--tg-theme-dark-secondary-bg-color);
+    --tg-theme-text-color: var(--tg-theme-dark-text-color, #ffffff);
+    --tg-theme-hint-color: var(--tg-theme-dark-hint-color, #adb5bd);
+    --tg-theme-link-color: var(--tg-theme-dark-link-color, #7aaaff);
+    --tg-theme-button-color: var(--tg-theme-dark-button-color, #3a86ff);
+    --tg-theme-button-text-color: var(--tg-theme-dark-button-text-color, #ffffff);
+    --tg-theme-secondary-bg-color: var(--tg-theme-dark-secondary-bg-color, rgba(40, 48, 56, 0.9));
     /* RGB */
-    --tg-theme-text-color-rgb: var(--tg-theme-dark-text-color-rgb);
-    --tg-theme-hint-color-rgb: var(--tg-theme-dark-hint-color-rgb);
-    --tg-theme-button-color-rgb: var(--tg-theme-dark-button-color-rgb);
-    --tg-theme-secondary-bg-color-rgb: var(--tg-theme-dark-secondary-bg-color-rgb);
+    --tg-theme-text-color-rgb: var(--tg-theme-dark-text-color-rgb, 255, 255, 255);
+    --tg-theme-hint-color-rgb: var(--tg-theme-dark-hint-color-rgb, 173, 181, 189);
+    --tg-theme-button-color-rgb: var(--tg-theme-dark-button-color-rgb, 58, 134, 255);
+    --tg-theme-secondary-bg-color-rgb: var(--tg-theme-dark-secondary-bg-color-rgb, 40, 48, 56);
 }
 
 /* --- Стили Body + Звездное небо --- */
 body {
     font-family: 'Poppins', sans-serif;
     margin: 0;
-    /* Убираем padding с body, вернем на wrapper */
     min-height: 100vh;
     box-sizing: border-box;
     background-color: #000; /* Базовый черный фон */
-    color: var(--tg-theme-text-color); /* Общий цвет текста */
+    color: var(--tg-theme-text-color);
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px 10px; /* Отступы для wrapper */
+    padding: 20px 10px;
     text-align: center;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow: hidden; /* Скрываем звезды, выходящие за экран */
-    position: relative; /* Для позиционирования псевдоэлементов */
+    position: relative;
 }
 
 /* Псевдоэлементы для звезд */
 body::before, body::after {
     content: '';
-    position: fixed; /* Покрывают весь вьюпорт */
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    pointer-events: none; /* Не мешают кликам */
-    z-index: -1; /* За контентом */
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    z-index: -1;
 }
 
-/* Генерация звезд (много box-shadow) */
+/* Генерация звезд */
 @function multiple-box-shadow ($n) {
   $value: '#{random(2000)}px #{random(2000)}px #FFF';
   @for $i from 2 through $n {
@@ -95,97 +73,71 @@ $shadows-medium: multiple-box-shadow(200);
 $shadows-big: multiple-box-shadow(100);
 
 /* Слои звезд */
-body::before { /* Маленькие и средние звезды */
-  width: 1px;
-  height: 1px;
+body::before {
+  width: 1px; height: 1px;
   background: transparent;
-  box-shadow: $shadows-small;
+  box-shadow: $shadows-small, $shadows-medium; /* Маленькие и средние */
   animation: animStar 50s linear infinite;
-  /* Добавляем второй слой средних звезд */
-  box-shadow: $shadows-small, $shadows-medium; /* Комбинируем */
 }
-
-body::after { /* Большие звезды */
-  width: 2px; /* Размер крупных */
-  height: 2px;
+body::after {
+  width: 2px; height: 2px;
   background: transparent;
-  box-shadow: $shadows-big;
+  box-shadow: $shadows-big; /* Большие */
   animation: animStar 100s linear infinite; /* Движутся медленнее */
 }
 
-/* Анимация движения звезд */
 @keyframes animStar {
-  from {
-    transform: translateY(0px);
-  }
-  to {
-    transform: translateY(-2000px); /* Движение вверх */
-  }
+  from { transform: translateY(0px); }
+  to { transform: translateY(-2000px); }
 }
 
 /* --- Контейнер для контента --- */
 .content-wrapper {
-    /* Полупрозрачный фон поверх звезд */
     background-color: var(--tg-theme-secondary-bg-color);
-    /* Можно добавить размытие фона под контейнером */
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
-
     padding: 25px 20px;
     border-radius: 12px;
-    /* Убираем тень, она плохо видна на темном фоне */
-    /* box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); */
-    /* Граница для отделения от фона */
     border: 1px solid rgba(var(--tg-theme-hint-color-rgb), 0.2);
-
     max-width: 600px;
     width: 100%;
     box-sizing: border-box;
-    position: relative; /* Чтобы был выше псевдоэлементов body */
-    z-index: 1; /* Выше фона */
-
-    /* Анимация появления */
+    position: relative;
+    z-index: 1;
     opacity: 0;
     transform: translateY(15px);
     animation: fadeInSlideUp 0.6s 0.1s ease-out forwards;
 }
 
-/* Убираем специфичные стили для .dark .content-wrapper, т.к. фон всегда темный */
-
-/* --- Стили текста (адаптируем цвета) --- */
+/* --- Стили текста --- */
 h1 {
     font-family: 'Raleway', sans-serif;
     font-weight: 700;
     font-size: clamp(1.8em, 5vw, 2.2em);
     margin-top: 0;
     margin-bottom: 12px;
-    color: var(--tg-theme-text-color); /* Используем переменную */
+    color: var(--tg-theme-text-color);
     letter-spacing: 0.5px;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.3); /* Легкая тень для читаемости */
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
 }
-
 p {
     font-size: clamp(0.95em, 3vw, 1.05em);
     line-height: 1.6;
-    color: var(--tg-theme-hint-color); /* Используем переменную */
+    color: var(--tg-theme-hint-color);
     margin-bottom: 20px;
 }
-
 #user-info {
     font-size: 0.85em;
     font-weight: 400;
     margin: 15px 0;
     color: var(--tg-theme-hint-color);
     padding: 6px 10px;
-    /* Фон чуть темнее контейнера */
     background-color: rgba(var(--tg-theme-bg-color-rgb), 0.7);
     border-radius: 5px;
     display: inline-block;
 }
-/* body.dark #user-info - не нужен, т.к. всегда темный фон */
 
 /* === Стили для Списка Задач === */
-
 .add-task-container {
     display: flex;
     gap: 8px;
@@ -197,17 +149,14 @@ p {
     z-index: 1;
     flex-wrap: nowrap;
 }
-
 #new-task-input {
     flex-grow: 1;
     min-width: 0;
     padding: 10px 14px;
-    /* Граница чуть светлее */
     border: 1px solid rgba(var(--tg-theme-hint-color-rgb), 0.3);
     border-radius: 8px;
     font-size: 1em;
     font-family: 'Poppins', sans-serif;
-    /* Фон инпута немного темнее контейнера */
     background-color: rgba(var(--tg-theme-bg-color-rgb), 0.8);
     color: var(--tg-theme-text-color);
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
@@ -219,27 +168,19 @@ p {
     z-index: 2;
     position: relative;
 }
-#new-task-input::placeholder {
-     color: var(--tg-theme-hint-color);
-     opacity: 0.7;
-}
+#new-task-input::placeholder { color: var(--tg-theme-hint-color); opacity: 0.7; }
 #new-task-input:focus {
     outline: none;
     border-color: var(--tg-theme-button-color);
     box-shadow: 0 0 0 2px rgba(var(--tg-theme-button-color-rgb), 0.4);
 }
-
-/* Кнопка Добавить */
 #add-task-btn {
     flex-shrink: 0;
     z-index: 2;
     position: relative;
     padding: 10px 15px;
     box-sizing: border-box;
-    /* Стили из общего button */
 }
-
-/* Заголовок списка */
 h2 {
     font-family: 'Raleway', sans-serif;
     font-size: 1.4em;
@@ -248,12 +189,9 @@ h2 {
     color: var(--tg-theme-text-color);
     text-align: left;
     padding-left: 5px;
-    /* Граница под заголовком */
     border-bottom: 1px solid rgba(var(--tg-theme-hint-color-rgb), 0.2);
     padding-bottom: 6px;
 }
-
-/* Список */
 #task-list {
     list-style: none;
     padding: 0;
@@ -262,13 +200,8 @@ h2 {
     opacity: 0;
     animation: fadeInSlideUp 0.6s 0.4s ease-out forwards;
 }
-
-/* Элементы списка */
 #task-list li {
-    /* Фон элементов чуть отличается от фона контейнера */
     background-color: rgba(var(--tg-theme-secondary-bg-color-rgb), 0.6);
-    /* Убираем внутреннюю тень, добавляем внешнюю границу */
-    /* box-shadow: inset 0 0 0 1px rgba(var(--tg-theme-text-color-rgb), 0.06); */
     border: 1px solid rgba(var(--tg-theme-hint-color-rgb), 0.1);
     padding: 10px 14px;
     margin-bottom: 8px;
@@ -288,14 +221,7 @@ h2 {
     background-color: rgba(var(--tg-theme-secondary-bg-color-rgb), 0.8);
     border-color: rgba(var(--tg-theme-hint-color-rgb), 0.2);
 }
-
-/* Анимация появления LI */
-#task-list li.visible {
-    opacity: 1;
-    transform: scale(1);
-}
-
-/* Сообщение "нет задач" */
+#task-list li.visible { opacity: 1; transform: scale(1); }
 #task-list .no-tasks {
     background-color: transparent;
     box-shadow: none;
@@ -308,15 +234,12 @@ h2 {
     transform: scale(1);
     transition: opacity 0.3s ease;
 }
-#task-list .no-tasks.visible {
-    opacity: 1;
-}
+#task-list .no-tasks.visible { opacity: 1; }
 
 /* --- Контейнер для кнопок --- */
 .button-container {
     margin-top: 20px;
     padding-top: 15px;
-    /* Граница над кнопками */
     border-top: 1px solid rgba(var(--tg-theme-hint-color-rgb), 0.2);
     display: flex;
     justify-content: space-around;
@@ -336,38 +259,29 @@ button {
     cursor: pointer;
     background-color: var(--tg-theme-button-color);
     color: var(--tg-theme-button-text-color);
-    /* Тень для кнопки */
     box-shadow: 0 3px 8px rgba(var(--tg-theme-button-color-rgb), 0.3);
     transition: all 0.2s ease;
     -webkit-tap-highlight-color: transparent;
     min-height: 42px;
     box-sizing: border-box;
-
     opacity: 0;
     transform: translateY(10px);
     animation: fadeInSlideUp 0.5s 0.6s ease-out forwards;
 }
-
-#add-task-btn {
-    animation: fadeInSlideUp 0.5s 0.35s ease-out forwards;
-}
-
+#add-task-btn { animation: fadeInSlideUp 0.5s 0.35s ease-out forwards; }
 button:hover {
-    filter: brightness(1.15); /* Ярче на темном */
+    filter: brightness(1.15);
     box-shadow: 0 4px 12px rgba(var(--tg-theme-button-color-rgb), 0.4);
     transform: translateY(-2px);
 }
-
 button:active {
-    filter: brightness(0.9); /* Темнее при нажатии */
+    filter: brightness(0.9);
     transform: translateY(0px) scale(0.98);
     box-shadow: 0 1px 4px rgba(var(--tg-theme-button-color-rgb), 0.25);
 }
-
-/* Кнопка Закрыть - сделаем ее менее яркой */
 #close-btn {
     background-color: var(--tg-theme-hint-color);
-    opacity: 0.8; /* Слегка прозрачная */
+    opacity: 0.8;
     box-shadow: 0 3px 8px rgba(var(--tg-theme-hint-color-rgb), 0.2);
 }
 #close-btn:hover {
@@ -376,7 +290,7 @@ button:active {
      filter: brightness(1.1);
      opacity: 1;
 }
- #close-btn:active {
+#close-btn:active {
      box-shadow: 0 1px 4px rgba(var(--tg-theme-hint-color-rgb), 0.2);
      transform: translateY(0px) scale(0.98);
      filter: brightness(0.95);
@@ -384,66 +298,26 @@ button:active {
 }
 
 /* === Стили для кнопок управления задачей === */
-.task-actions {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    margin-left: 10px;
-}
-
+.task-actions { display: flex; align-items: center; gap: 5px; margin-left: 10px; }
 .task-actions button {
-    background: none;
-    border: none;
-    box-shadow: none;
-    padding: 5px;
-    margin: 0;
-    cursor: pointer;
-    font-size: 1.2em;
-    line-height: 1;
+    background: none; border: none; box-shadow: none; padding: 5px; margin: 0;
+    cursor: pointer; font-size: 1.2em; line-height: 1;
     color: var(--tg-theme-hint-color);
     transition: color 0.2s ease, transform 0.2s ease;
-    border-radius: 4px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 28px;
-    min-height: 28px;
-    box-sizing: border-box;
-    opacity: 1;
-    transform: none;
-    animation: none;
+    border-radius: 4px; display: inline-flex; align-items: center; justify-content: center;
+    min-width: 28px; min-height: 28px; box-sizing: border-box;
+    opacity: 1; transform: none; animation: none;
 }
-
 .task-actions button:hover {
     color: var(--tg-theme-text-color);
-    transform: scale(1.15); /* Увеличим эффект */
-    filter: none;
+    transform: scale(1.15); filter: none;
 }
-
-.task-actions .delete-btn:hover {
-    color: #ff7b7b; /* Яркий красный для темного фона */
-}
-
-.task-actions button:active {
-    transform: scale(0.95);
-    filter: none;
-}
-
-/* Span для текста задачи */
-#task-list li span.task-text {
-    flex-grow: 1;
-    margin-right: 5px;
-    min-width: 0;
-}
+.task-actions .delete-btn:hover { color: #ff7b7b; }
+.task-actions button:active { transform: scale(0.95); filter: none; }
+#task-list li span.task-text { flex-grow: 1; margin-right: 5px; min-width: 0; }
 
 /* --- Ключевые кадры для анимации --- */
 @keyframes fadeInSlideUp {
-    from {
-        opacity: 0;
-        transform: translateY(15px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
 }

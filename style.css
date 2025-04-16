@@ -7,28 +7,28 @@
     --tg-theme-link-color: #6ea8fe;
     --tg-theme-button-color: #2e7ddb;
     --tg-theme-button-text-color: #ffffff;
-    --tg-theme-secondary-bg-color: rgba(33, 40, 49, 0.85); /* Полупрозрачный для контейнера */
-    /* RGB */
+    --tg-theme-secondary-bg-color-value: 33, 40, 49; /* Только RGB значения для secondary */
+    /* RGB для остальных */
     --tg-theme-bg-color-rgb: 0, 0, 16;
     --tg-theme-text-color-rgb: 224, 224, 224;
     --tg-theme-hint-color-rgb: 165, 172, 181;
     --tg-theme-button-color-rgb: 46, 125, 219;
-    --tg-theme-secondary-bg-color-rgb: 33, 40, 49; /* Для непрозрачных версий */
 }
 
 /* --- Применение цветов для темной темы (минимальные изменения от TG) --- */
 body.dark {
+    /* Переопределяем переменные, если TG прислал темную тему */
     --tg-theme-text-color: var(--tg-theme-dark-text-color, #ffffff);
     --tg-theme-hint-color: var(--tg-theme-dark-hint-color, #adb5bd);
     --tg-theme-link-color: var(--tg-theme-dark-link-color, #7aaaff);
     --tg-theme-button-color: var(--tg-theme-dark-button-color, #3a86ff);
     --tg-theme-button-text-color: var(--tg-theme-dark-button-text-color, #ffffff);
-    --tg-theme-secondary-bg-color: var(--tg-theme-dark-secondary-bg-color, rgba(40, 48, 56, 0.9));
+    /* Используем RGB из TG если есть, иначе дефолтные темные */
+    --tg-theme-secondary-bg-color-value: var(--tg-theme-dark-secondary-bg-color-rgb, 40, 48, 56);
     /* RGB */
     --tg-theme-text-color-rgb: var(--tg-theme-dark-text-color-rgb, 255, 255, 255);
     --tg-theme-hint-color-rgb: var(--tg-theme-dark-hint-color-rgb, 173, 181, 189);
     --tg-theme-button-color-rgb: var(--tg-theme-dark-button-color-rgb, 58, 134, 255);
-    --tg-theme-secondary-bg-color-rgb: var(--tg-theme-dark-secondary-bg-color-rgb, 40, 48, 56);
 }
 
 /* --- Стили Body + Звездное небо --- */
@@ -37,7 +37,7 @@ body {
     margin: 0;
     min-height: 100vh;
     box-sizing: border-box;
-    background-color: #000010; /* Темно-синий/черный фон космоса */
+    background-color: #000010;
     color: var(--tg-theme-text-color);
     display: flex;
     flex-direction: column;
@@ -46,51 +46,37 @@ body {
     text-align: center;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    overflow: hidden; /* Скрываем все, что выходит за пределы */
-    position: relative; /* Для позиционирования дочерних элементов */
+    overflow: hidden;
+    position: relative;
 }
 
 /* --- Контейнер для анимированного фона --- */
 .stars-background {
-    position: fixed; /* Фиксирован относительно viewport */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none; /* Не мешает кликам */
-    z-index: 0; /* Под контентом */
-    overflow: hidden; /* Важно, чтобы анимации не вылезали */
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
 }
 
 /* --- Статичные звезды (ПРЕДСГЕНЕРИРОВАННЫЕ box-shadow) --- */
-/* Убрали SASS @function, заменили на готовый набор теней (меньше звезд, но точно CSS) */
 #stars-static-1, #stars-static-2 {
-    width: 1px;
-    height: 1px;
-    background: transparent;
-    position: absolute;
-    top: 0; left: 0;
+    width: 1px; height: 1px; background: transparent;
+    position: absolute; top: 0; left: 0;
     animation: twinkle 5s linear infinite alternate;
 }
 #stars-static-1 {
-     box-shadow: 799px 1468px rgba(255,255,255,0.8), 1096px 955px rgba(255,255,255,0.8), 1068px 1199px rgba(255,255,255,0.8), 1256px 186px rgba(255,255,255,0.8), 130px 1955px rgba(255,255,255,0.8), 1024px 178px rgba(255,255,255,0.8), 1612px 1133px rgba(255,255,255,0.8), 1141px 1599px rgba(255,255,255,0.8), 898px 719px rgba(255,255,255,0.8), 1524px 74px rgba(255,255,255,0.8), 461px 1921px rgba(255,255,255,0.8), 100px 500px rgba(255,255,255,0.8), 1500px 1200px rgba(255,255,255,0.8), 300px 1800px rgba(255,255,255,0.8), 1800px 900px rgba(255,255,255,0.8), 600px 200px rgba(255,255,255,0.8), 950px 1400px rgba(255,255,255,0.8), 1200px 550px rgba(255,255,255,0.8), 1750px 1600px rgba(255,255,255,0.8), 250px 950px rgba(255,255,255,0.8); /* И т.д. можно добавить еще */
+     box-shadow: 799px 1468px rgba(255,255,255,0.8), 1096px 955px rgba(255,255,255,0.8), 1068px 1199px rgba(255,255,255,0.8), 1256px 186px rgba(255,255,255,0.8), 130px 1955px rgba(255,255,255,0.8), 1024px 178px rgba(255,255,255,0.8), 1612px 1133px rgba(255,255,255,0.8), 1141px 1599px rgba(255,255,255,0.8), 898px 719px rgba(255,255,255,0.8), 1524px 74px rgba(255,255,255,0.8), 461px 1921px rgba(255,255,255,0.8), 100px 500px rgba(255,255,255,0.8), 1500px 1200px rgba(255,255,255,0.8), 300px 1800px rgba(255,255,255,0.8), 1800px 900px rgba(255,255,255,0.8), 600px 200px rgba(255,255,255,0.8), 950px 1400px rgba(255,255,255,0.8), 1200px 550px rgba(255,255,255,0.8), 1750px 1600px rgba(255,255,255,0.8), 250px 950px rgba(255,255,255,0.8); /* И т.д. */
 }
 #stars-static-2 {
-    width: 2px;
-    height: 2px;
-    animation-duration: 7s;
+    width: 2px; height: 2px; animation-duration: 7s;
     box-shadow: 1903px 1319px rgba(255,255,255,0.6), 1394px 1174px rgba(255,255,255,0.6), 95px 120px rgba(255,255,255,0.6), 1406px 536px rgba(255,255,255,0.6), 1810px 1913px rgba(255,255,255,0.6), 1080px 800px rgba(255,255,255,0.6), 550px 1550px rgba(255,255,255,0.6), 1600px 400px rgba(255,255,255,0.6), 820px 1700px rgba(255,255,255,0.6), 1150px 250px rgba(255,255,255,0.6); /* И т.д. */
 }
 
 /* --- Луна --- */
 .moon {
-    position: absolute;
-    top: 10vh;
-    right: 15vw;
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    background: radial-gradient(ellipse at center, #f0f0f0 0%, #d0d0d0 60%, #a0a0a0 100%);
+    position: absolute; top: 10vh; right: 15vw; width: 80px; height: 80px;
+    border-radius: 50%; background: radial-gradient(ellipse at center, #f0f0f0 0%, #d0d0d0 60%, #a0a0a0 100%);
     box-shadow: 0 0 30px rgba(240, 240, 240, 0.5);
     animation: slowRotate 180s linear infinite, slowMove 240s ease-in-out infinite alternate;
     z-index: 1;
@@ -98,69 +84,40 @@ body {
 
 /* --- Планеты --- */
 .planet {
-    position: absolute;
-    border-radius: 50%;
-    z-index: 1;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
+    position: absolute; border-radius: 50%; z-index: 1;
+    animation-timing-function: linear; animation-iteration-count: infinite;
 }
 .planet1 { /* Сатурн */
-    bottom: 15vh;
-    left: 10vw;
-    width: 100px;
-    height: 100px;
+    bottom: 15vh; left: 10vw; width: 100px; height: 100px;
     background: radial-gradient(circle at 30% 30%, #eacda3 0%, #d6ae7b 100%);
     box-shadow: 0 0 25px rgba(234, 205, 163, 0.3);
-    animation-name: slowRotate, slowMoveDiagonal;
-    animation-duration: 90s, 200s;
-    animation-timing-function: linear, ease-in-out;
-    animation-direction: normal, alternate;
+    animation-name: slowRotate, slowMoveDiagonal; animation-duration: 90s, 200s;
+    animation-timing-function: linear, ease-in-out; animation-direction: normal, alternate;
 }
 .planet1::before { /* Кольца */
-    content: '';
-    position: absolute;
-    top: 45%; left: -20%;
-    width: 140%; height: 10%;
-    background: rgba(214, 174, 123, 0.7);
-    border-radius: 50%;
-    transform: rotate(-20deg);
+    content: ''; position: absolute; top: 45%; left: -20%; width: 140%; height: 10%;
+    background: rgba(214, 174, 123, 0.7); border-radius: 50%; transform: rotate(-20deg);
     box-shadow: 0 0 10px rgba(214, 174, 123, 0.5);
 }
 .planet2 { /* Марс */
-    top: 25vh;
-    left: 30vw;
-    width: 50px;
-    height: 50px;
+    top: 25vh; left: 30vw; width: 50px; height: 50px;
     background: radial-gradient(circle at 60% 70%, #ff8c69 0%, #c85a3d 100%);
     box-shadow: 0 0 20px rgba(255, 140, 105, 0.3);
-    animation-name: slowRotate;
-    animation-duration: 120s;
+    animation-name: slowRotate; animation-duration: 120s;
 }
 
 /* --- Падающие звезды --- */
 .shooting-star {
-    position: absolute;
-    width: 2px;
-    height: 80px;
+    position: absolute; width: 2px; height: 80px;
     background: linear-gradient(to top, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.8));
-    border-radius: 50%;
-    transform-origin: top center;
-    z-index: 2;
-    animation-name: shooting;
-    animation-timing-function: cubic-bezier(0.6, -0.28, 0.735, 0.045);
-    animation-iteration-count: infinite;
-    opacity: 0;
+    border-radius: 50%; transform-origin: top center; z-index: 2;
+    animation-name: shooting; animation-timing-function: cubic-bezier(0.6, -0.28, 0.735, 0.045);
+    animation-iteration-count: infinite; opacity: 0;
 }
 .shooting-star::before { /* Голова */
-    content: '';
-    position: absolute;
-    bottom: -2px; left: -1px;
-    width: 4px; height: 4px;
-    background-color: #fff;
-    border-radius: 50%;
-    box-shadow: 0 0 6px #fff;
+    content: ''; position: absolute; bottom: -2px; left: -1px; width: 4px; height: 4px;
+    background-color: #fff; border-radius: 50%; box-shadow: 0 0 6px #fff;
 }
-
 /* Разные параметры звезд */
 .star1 { top: -80px; left: 30%; --angle: 230deg; transform: rotate(var(--angle)); animation-duration: 2s; animation-delay: 1s; }
 .star2 { top: -80px; left: 60%; --angle: 220deg; transform: rotate(var(--angle)); animation-duration: 1.5s; animation-delay: 3s; height: 60px; }
@@ -177,9 +134,11 @@ body {
 
 /* --- Контейнер для основного контента --- */
 .content-wrapper {
-    background-color: var(--tg-theme-secondary-bg-color);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+    /* --- ИЗМЕНЕНИЕ ЗДЕСЬ --- */
+    background-color: rgba(var(--tg-theme-secondary-bg-color-value), 0.65); /* Используем RGB переменную и альфа 0.65 */
+    backdrop-filter: blur(6px); /* Немного увеличили размытие */
+    -webkit-backdrop-filter: blur(6px);
+    /* ---------------------- */
     padding: 25px 20px;
     border-radius: 12px;
     border: 1px solid rgba(var(--tg-theme-hint-color-rgb), 0.2);
@@ -233,14 +192,16 @@ h2 {
     animation: fadeInSlideUp 0.6s 0.4s ease-out forwards;
 }
 #task-list li {
-    background-color: rgba(var(--tg-theme-secondary-bg-color-rgb), 0.6); border: 1px solid rgba(var(--tg-theme-hint-color-rgb), 0.1);
+    background-color: rgba(var(--tg-theme-secondary-bg-color-value), 0.6); /* Фон задач тоже используем RGB */
+    border: 1px solid rgba(var(--tg-theme-hint-color-rgb), 0.1);
     padding: 10px 14px; margin-bottom: 8px; border-radius: 6px; font-size: 0.95em; color: var(--tg-theme-text-color);
     transition: background-color 0.2s ease, border-color 0.2s ease; display: flex; justify-content: space-between;
     align-items: center; word-break: break-word; opacity: 0; transform: scale(0.95);
     transition: opacity 0.3s ease, transform 0.3s ease;
 }
 #task-list li:hover {
-    background-color: rgba(var(--tg-theme-secondary-bg-color-rgb), 0.8); border-color: rgba(var(--tg-theme-hint-color-rgb), 0.2);
+    background-color: rgba(var(--tg-theme-secondary-bg-color-value), 0.8); /* Фон задач при наведении */
+    border-color: rgba(var(--tg-theme-hint-color-rgb), 0.2);
 }
 #task-list li.visible { opacity: 1; transform: scale(1); }
 #task-list .no-tasks {

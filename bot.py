@@ -53,14 +53,12 @@ async def handle_web_app_data(update: Update, context: ContextTypes.DEFAULT_TYPE
             logger.info(f"Действие '{action}'. Задачи: {tasks}")
 
             if tasks:
-                # --- ИЗМЕНЕНИЕ ЗДЕСЬ: Более нейтральный текст для пересылки ---
-                message_text = "<b>Список задач:</b>\n\n" # Заголовок
+                # --- Форматирование текста для пересылки ---
+                message_text = "<b>Список задач:</b>\n\n"
                 for i, task in enumerate(tasks, 1):
                     safe_task = html.escape(task)
                     message_text += f"{i}. {safe_task}\n"
-                # Убираем упоминание, что это "ваш" список
-                # message_text += f"\n<i>Всего задач: {len(tasks)}</i>" # Можно оставить или убрать
-                # ------------------------------------------------------------
+                # ------------------------------------------
 
                 await context.bot.send_message(
                     chat_id=chat_id,
@@ -100,7 +98,7 @@ def main() -> None:
     logger.info("Запуск бота...")
 
     # Используем ваш токен
-    if BOT_TOKEN == "7588965175:AAEorKSyas6prFbVf01hf83vLbHsci75p9s" and BOT_TOKEN.startswith("ВАШ"):
+    if BOT_TOKEN == "ВАШ_БОТ_ТОКЕН": # Проверка на дефолтный токен
          logger.error("ОШИБКА: Не указан BOT_TOKEN! Пожалуйста, вставьте ваш API токен.")
          return
 

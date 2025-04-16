@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>TG Web App: Звездные Задачи</title>
 
-    <!-- Подключение шрифтов (Poppins и Raleway) -->
+    <!-- Подключение шрифтов -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Raleway:wght@700&display=swap" rel="stylesheet">
@@ -17,6 +17,21 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
+    <!-- Элементы для фона - ДО основного контента -->
+    <div class="stars-background">
+        <!-- Статичные далекие звезды -->
+        <div id="stars-static-1"></div>
+        <div id="stars-static-2"></div>
+        <!-- Анимированные элементы -->
+        <div class="moon"></div>
+        <div class="planet planet1"></div>
+        <div class="planet planet2"></div>
+        <div class="shooting-star star1"></div>
+        <div class="shooting-star star2"></div>
+        <div class="shooting-star star3"></div>
+        <div class="shooting-star star4"></div>
+    </div>
+
     <!-- Контейнер для основного контента -->
     <div class="content-wrapper">
         <h1>Мои Задачи</h1>

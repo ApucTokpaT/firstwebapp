@@ -18,6 +18,8 @@
 
 /* --- Применение цветов для темной темы (минимальные изменения от TG) --- */
 body.dark {
+    /* Переопределяем переменные, если TG прислал темную тему */
+    /* Используем var(--имя-переменной-темной, значение-по-умолчанию) */
     --tg-theme-text-color: var(--tg-theme-dark-text-color, #ffffff);
     --tg-theme-hint-color: var(--tg-theme-dark-hint-color, #adb5bd);
     --tg-theme-link-color: var(--tg-theme-dark-link-color, #7aaaff);
@@ -37,7 +39,7 @@ body {
     margin: 0;
     min-height: 100vh;
     box-sizing: border-box;
-    background-color: #000; /* Базовый черный фон */
+    background-color: #000010; /* Темно-синий/черный фон космоса */
     color: var(--tg-theme-text-color);
     display: flex;
     flex-direction: column;
@@ -46,52 +48,203 @@ body {
     text-align: center;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    overflow: hidden; /* Скрываем звезды, выходящие за экран */
-    position: relative;
+    overflow: hidden; /* Скрываем все, что выходит за пределы */
+    position: relative; /* Для позиционирования дочерних элементов */
 }
 
-/* Псевдоэлементы для звезд */
-body::before, body::after {
-    content: '';
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    pointer-events: none;
-    z-index: -1;
+/* --- Контейнер для анимированного фона --- */
+.stars-background {
+    position: fixed; /* Фиксирован относительно viewport */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Не мешает кликам */
+    z-index: 0; /* Под контентом */
+    overflow: hidden; /* Важно, чтобы анимации не вылезали */
 }
 
-/* Генерация звезд */
-@function multiple-box-shadow ($n) {
-  $value: '#{random(2000)}px #{random(2000)}px #FFF';
+/* --- Статичные звезды (много точек через box-shadow) --- */
+@function multiple-box-shadow ($n, $color: #FFF) {
+  $value: '#{random(2000)}px #{random(2000)}px #{$color}';
   @for $i from 2 through $n {
-    $value: '#{$value} , #{random(2000)}px #{random(2000)}px #FFF';
+    $value: '#{$value} , #{random(2000)}px #{random(2000)}px #{$color}';
   }
   @return unquote($value);
 }
-
-$shadows-small: multiple-box-shadow(700);
-$shadows-medium: multiple-box-shadow(200);
-$shadows-big: multiple-box-shadow(100);
-
-/* Слои звезд */
-body::before {
-  width: 1px; height: 1px;
-  background: transparent;
-  box-shadow: $shadows-small, $shadows-medium; /* Маленькие и средние */
-  animation: animStar 50s linear infinite;
+#stars-static-1, #stars-static-2 {
+    width: 1px;
+    height: 1px;
+    background: transparent;
+    box-shadow: multiple-box-shadow(600, rgba(255,255,255,0.8));
+    position: absolute;
+    top: 0; left: 0; /* Статичны */
+    /* Анимация мерцания */
+    animation: twinkle 5s linear infinite alternate;
 }
-body::after {
-  width: 2px; height: 2px;
-  background: transparent;
-  box-shadow: $shadows-big; /* Большие */
-  animation: animStar 100s linear infinite; /* Движутся медленнее */
+#stars-static-2 {
+    width: 2px;
+    height: 2px;
+    box-shadow: multiple-box-shadow(150, rgba(255,255,255,0.6));
+    animation-duration: 7s; /* Другая скорость мерцания */
 }
 
-@keyframes animStar {
-  from { transform: translateY(0px); }
-  to { transform: translateY(-2000px); }
+/* --- Луна --- */
+.moon {
+    position: absolute;
+    top: 10vh;
+    right: 15vw;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse at center, #f0f0f0 0%, #d0d0d0 60%, #a0a0a0 100%);
+    box-shadow: 0 0 30px rgba(240, 240, 240, 0.5); /* Свечение */
+    animation: slowRotate 180s linear infinite, slowMove 240s ease-in-out infinite alternate; /* Вращение и легкое движение */
+    z-index: 1; /* Чуть выше звезд */
 }
 
-/* --- Контейнер для контента --- */
+/* --- Планеты --- */
+.planet {
+    position: absolute;
+    border-radius: 50%;
+    z-index: 1;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+.planet1 { /* Похожая на Сатурн */
+    bottom: 15vh;
+    left: 10vw;
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle at 30% 30%, #eacda3 0%, #d6ae7b 100%);
+    box-shadow: 0 0 25px rgba(234, 205, 163, 0.3);
+    animation-name: slowRotate, slowMoveDiagonal;
+    animation-duration: 90s, 200s; /* Разные скорости */
+    animation-timing-function: linear, ease-in-out;
+    animation-direction: normal, alternate; /* Движение туда-сюда */
+}
+/* Кольца Сатурна */
+.planet1::before {
+    content: '';
+    position: absolute;
+    top: 45%; /* Положение кольца */
+    left: -20%; /* Выступает за планету */
+    width: 140%; /* Шире планеты */
+    height: 10%; /* Толщина кольца */
+    background: rgba(214, 174, 123, 0.7);
+    border-radius: 50%;
+    transform: rotate(-20deg); /* Наклон кольца */
+    box-shadow: 0 0 10px rgba(214, 174, 123, 0.5);
+}
+.planet2 { /* Похожая на Марс */
+    top: 25vh;
+    left: 30vw;
+    width: 50px;
+    height: 50px;
+    background: radial-gradient(circle at 60% 70%, #ff8c69 0%, #c85a3d 100%);
+    box-shadow: 0 0 20px rgba(255, 140, 105, 0.3);
+    animation-name: slowRotate;
+    animation-duration: 120s;
+}
+
+/* --- Падающие звезды --- */
+.shooting-star {
+    position: absolute;
+    width: 2px; /* Толщина хвоста */
+    height: 80px; /* Длина хвоста */
+    background: linear-gradient(to top, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.8));
+    border-radius: 50%; /* Скруглим конец */
+    transform-origin: top center;
+    z-index: 2; /* Выше планет */
+    animation-name: shooting;
+    animation-timing-function: cubic-bezier(0.6, -0.28, 0.735, 0.045); /* Ускорение в начале */
+    animation-iteration-count: infinite;
+    opacity: 0; /* Начинаем невидимыми */
+}
+/* Голова звезды */
+.shooting-star::before {
+    content: '';
+    position: absolute;
+    bottom: -2px; /* У основания хвоста */
+    left: -1px; /* Центрируем */
+    width: 4px;
+    height: 4px;
+    background-color: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 6px #fff;
+}
+
+/* Разные траектории, задержки и скорости */
+.star1 {
+    top: -80px; /* Начинают за экраном */
+    left: 30%;
+    --angle: 230deg; /* CSS переменная для угла */
+    transform: rotate(var(--angle));
+    animation-duration: 2s;
+    animation-delay: 1s;
+}
+.star2 {
+    top: -80px;
+    left: 60%;
+     --angle: 220deg;
+    transform: rotate(var(--angle));
+    animation-duration: 1.5s;
+    animation-delay: 3s;
+    height: 60px; /* Короче */
+}
+.star3 {
+    top: -80px;
+    left: 80%;
+     --angle: 240deg;
+    transform: rotate(var(--angle));
+    animation-duration: 2.5s;
+    animation-delay: 6s;
+    width: 1px; height: 100px; /* Тоньше и длиннее */
+}
+.star4 {
+    top: -80px;
+    left: 10%;
+     --angle: 210deg;
+    transform: rotate(var(--angle));
+    animation-duration: 1.8s;
+    animation-delay: 8s;
+}
+
+/* --- Анимации --- */
+@keyframes slowRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+@keyframes slowMove { /* Покачивание луны */
+    from { transform: translate(0, 0) rotate(0deg); }
+    50%  { transform: translate(-5px, 3px) rotate(2deg); }
+    to { transform: translate(0, 0) rotate(0deg); }
+}
+@keyframes slowMoveDiagonal { /* Движение планеты */
+    from { transform: translate(0, 0) rotate(0deg); }
+    50% { transform: translate(15px, -10px) rotate(5deg); }
+    to { transform: translate(0, 0) rotate(0deg); }
+}
+@keyframes shooting {
+    0% {
+        opacity: 0;
+        transform: translateY(0) rotate(var(--angle));
+    }
+    10% {
+        opacity: 1; /* Появляется */
+    }
+    100% {
+        opacity: 0; /* Исчезает */
+        transform: translateY(120vh) rotate(var(--angle)); /* Улетает далеко за экран */
+    }
+}
+@keyframes twinkle { /* Мерцание статичных звезд */
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+
+/* --- Контейнер для основного контента --- */
 .content-wrapper {
     background-color: var(--tg-theme-secondary-bg-color);
     backdrop-filter: blur(4px);
@@ -102,14 +255,14 @@ body::after {
     max-width: 600px;
     width: 100%;
     box-sizing: border-box;
-    position: relative;
-    z-index: 1;
+    position: relative; /* Чтобы был выше фона */
+    z-index: 10; /* Выше всех фоновых элементов */
     opacity: 0;
     transform: translateY(15px);
     animation: fadeInSlideUp 0.6s 0.1s ease-out forwards;
 }
 
-/* --- Стили текста --- */
+/* --- Остальные стили (текст, инпут, список, кнопки) --- */
 h1 {
     font-family: 'Raleway', sans-serif;
     font-weight: 700;
@@ -136,8 +289,6 @@ p {
     border-radius: 5px;
     display: inline-block;
 }
-
-/* === Стили для Списка Задач === */
 .add-task-container {
     display: flex;
     gap: 8px;
@@ -235,8 +386,6 @@ h2 {
     transition: opacity 0.3s ease;
 }
 #task-list .no-tasks.visible { opacity: 1; }
-
-/* --- Контейнер для кнопок --- */
 .button-container {
     margin-top: 20px;
     padding-top: 15px;
@@ -246,8 +395,6 @@ h2 {
     flex-wrap: wrap;
     gap: 10px;
 }
-
-/* --- Стили кнопок --- */
 button {
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
@@ -296,8 +443,6 @@ button:active {
      filter: brightness(0.95);
      opacity: 0.9;
 }
-
-/* === Стили для кнопок управления задачей === */
 .task-actions { display: flex; align-items: center; gap: 5px; margin-left: 10px; }
 .task-actions button {
     background: none; border: none; box-shadow: none; padding: 5px; margin: 0;
@@ -316,7 +461,7 @@ button:active {
 .task-actions button:active { transform: scale(0.95); filter: none; }
 #task-list li span.task-text { flex-grow: 1; margin-right: 5px; min-width: 0; }
 
-/* --- Ключевые кадры для анимации --- */
+/* Анимация появления контента */
 @keyframes fadeInSlideUp {
     from { opacity: 0; transform: translateY(15px); }
     to { opacity: 1; transform: translateY(0); }

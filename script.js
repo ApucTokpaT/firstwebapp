@@ -19,12 +19,10 @@ function setThemeClass() {
              return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : null;
         };
         // Устанавливаем только переменные, которые могут меняться от TG (кнопки, ссылки и т.д.)
-        // Основной фон и текст заданы жестко в CSS
         const defaults = {
              dark: { hint: '#adb5bd', link: '#7aaaff', button: '#3a86ff', button_text: '#ffffff', secondary_bg: 'rgba(40, 48, 56, 0.9)' }
         };
-        // Используем темные дефолты, если TG не прислал тему
-        const currentDefaults = defaults.dark;
+        const currentDefaults = defaults.dark; // Базируемся на темной теме
         const params = themeParams || {};
 
         // Обновляем только те переменные, которые могут отличаться в темной теме TG
@@ -32,14 +30,14 @@ function setThemeClass() {
         root.style.setProperty('--tg-theme-link-color', params.link_color || currentDefaults.link);
         root.style.setProperty('--tg-theme-button-color', params.button_color || currentDefaults.button);
         root.style.setProperty('--tg-theme-button-text-color', params.button_text_color || currentDefaults.button_text);
-        root.style.setProperty('--tg-theme-secondary-bg-color', params.secondary_bg_color ? `rgba(${hexToRgb(params.secondary_bg_color)}, 0.9)` : currentDefaults.secondary_bg); // Делаем полупрозрачным
+        // Для secondary_bg берем либо из TG (и делаем полупрозрачным), либо дефолтный (уже полупрозрачный)
+        root.style.setProperty('--tg-theme-secondary-bg-color', params.secondary_bg_color ? `rgba(${hexToRgb(params.secondary_bg_color)}, 0.9)` : currentDefaults.secondary_bg);
 
         // RGB для кнопок и подсказок
         root.style.setProperty('--tg-theme-hint-color-rgb', hexToRgb(params.hint_color || currentDefaults.hint) || '173, 181, 189');
         root.style.setProperty('--tg-theme-button-color-rgb', hexToRgb(params.button_color || currentDefaults.button) || '58, 134, 255');
-        root.style.setProperty('--tg-theme-secondary-bg-color-rgb', hexToRgb(params.secondary_bg_color) || '40, 48, 56');
+        root.style.setProperty('--tg-theme-secondary-bg-color-rgb', hexToRgb(params.secondary_bg_color) || '40, 48, 56'); // RGB без прозрачности
 
-        // Класс dark больше не нужен для фона, но может использоваться для других элементов
         document.body.classList.toggle('dark', true); // Всегда считаем темной темой для консистентности
 
     } catch (e) {
@@ -48,8 +46,6 @@ function setThemeClass() {
 }
 
 // --- Функции Сохранения/Загрузки Задач ---
-
-// Загрузка задач из localStorage
 function loadTasks() {
     console.log("Attempting to load tasks from localStorage.");
     const savedTasks = localStorage.getItem(STORAGE_KEY);
@@ -67,8 +63,6 @@ function loadTasks() {
         tasks = [];
     }
 }
-
-// Сохранение задач в localStorage
 function saveTasks() {
     console.log("Attempting to save tasks to localStorage.");
     try {
@@ -82,10 +76,7 @@ function saveTasks() {
     }
 }
 
-
 // --- Функции для работы со списком задач ---
-
-// Рендер списка задач
 function renderTasks() {
     console.log("renderTasks called. Tasks:", tasks);
     const taskList = document.getElementById('task-list');
@@ -95,10 +86,7 @@ function renderTasks() {
         return;
     }
     taskList.innerHTML = '';
-
-    if (editingIndex !== null) {
-        cancelEdit();
-    }
+    if (editingIndex !== null) cancelEdit();
 
     if (tasks.length === 0) {
         const noTasksLi = document.createElement('li');
@@ -111,158 +99,68 @@ function renderTasks() {
 
     tasks.forEach((taskText, index) => {
         try {
-            const listItem = document.createElement('li');
-            listItem.dataset.index = index;
-
-            const textSpan = document.createElement('span');
-            textSpan.className = 'task-text';
-            textSpan.textContent = taskText;
-
-            const actionsDiv = document.createElement('div');
-            actionsDiv.className = 'task-actions';
-
-            const editBtn = document.createElement('button');
-            editBtn.className = 'edit-btn';
-            editBtn.innerHTML = '✏️';
-            editBtn.setAttribute('aria-label', 'Изменить задачу');
-            editBtn.dataset.index = index;
-
-            const deleteBtn = document.createElement('button');
-            deleteBtn.className = 'delete-btn';
-            deleteBtn.innerHTML = '🗑️';
-            deleteBtn.setAttribute('aria-label', 'Удалить задачу');
-            deleteBtn.dataset.index = index;
-
-            actionsDiv.appendChild(editBtn);
-            actionsDiv.appendChild(deleteBtn);
-
-            listItem.appendChild(textSpan);
-            listItem.appendChild(actionsDiv);
+            const listItem = document.createElement('li'); listItem.dataset.index = index;
+            const textSpan = document.createElement('span'); textSpan.className = 'task-text'; textSpan.textContent = taskText;
+            const actionsDiv = document.createElement('div'); actionsDiv.className = 'task-actions';
+            const editBtn = document.createElement('button'); editBtn.className = 'edit-btn'; editBtn.innerHTML = '✏️'; editBtn.setAttribute('aria-label', 'Изменить задачу'); editBtn.dataset.index = index;
+            const deleteBtn = document.createElement('button'); deleteBtn.className = 'delete-btn'; deleteBtn.innerHTML = '🗑️'; deleteBtn.setAttribute('aria-label', 'Удалить задачу'); deleteBtn.dataset.index = index;
+            actionsDiv.appendChild(editBtn); actionsDiv.appendChild(deleteBtn);
+            listItem.appendChild(textSpan); listItem.appendChild(actionsDiv);
             taskList.appendChild(listItem);
-
-            setTimeout(() => {
-                listItem.classList.add('visible');
-            }, 10 * index);
-
-        } catch (e) {
-            console.error(`Error rendering task ${index}:`, e);
-        }
+            setTimeout(() => { listItem.classList.add('visible'); }, 10 * index);
+        } catch (e) { console.error(`Error rendering task ${index}:`, e); }
     });
     console.log("renderTasks finished.");
 }
-
-// Добавление или сохранение задачи
 function addTask() {
-    console.log("addTask function called. Editing index:", editingIndex);
     const input = document.getElementById('new-task-input');
     const addTaskBtn = document.getElementById('add-task-btn');
     if (!input || !addTaskBtn) return;
-
     try {
         const taskText = input.value.trim();
-        if (taskText === "") {
-            tg.HapticFeedback.notificationOccurred('warning');
-            tg.showAlert("Пожалуйста, введите текст задачи!");
-            input.focus();
-            return;
-        }
-
+        if (taskText === "") { tg.HapticFeedback.notificationOccurred('warning'); tg.showAlert("Пожалуйста, введите текст задачи!"); input.focus(); return; }
         if (editingIndex !== null) {
-            tasks[editingIndex] = taskText;
-            editingIndex = null;
-            addTaskBtn.textContent = 'Добавить';
-            input.value = '';
-            renderTasks();
-            saveTasks(); // Сохраняем изменения
-            tg.HapticFeedback.notificationOccurred('success');
+            tasks[editingIndex] = taskText; editingIndex = null; addTaskBtn.textContent = 'Добавить'; input.value = '';
+            renderTasks(); saveTasks(); tg.HapticFeedback.notificationOccurred('success');
         } else {
-            tasks.push(taskText);
-            input.value = '';
-            renderTasks();
-            saveTasks(); // Сохраняем изменения
-            tg.HapticFeedback.impactOccurred('light');
+            tasks.push(taskText); input.value = '';
+            renderTasks(); saveTasks(); tg.HapticFeedback.impactOccurred('light');
         }
-    } catch (e) {
-        console.error("Error in addTask/saveTask:", e);
-        tg.showAlert("Произошла ошибка при сохранении задачи.");
-        cancelEdit();
-    }
+    } catch (e) { console.error("Error in addTask/saveTask:", e); tg.showAlert("Произошла ошибка при сохранении задачи."); cancelEdit(); }
 }
-
-// Начало редактирования
 function startEditTask(index) {
-    console.log(`Starting edit for task index: ${index}`);
     const input = document.getElementById('new-task-input');
     const addTaskBtn = document.getElementById('add-task-btn');
     if (!input || !addTaskBtn || tasks[index] === undefined) return;
-
-    if (editingIndex !== null && editingIndex !== index) {
-       cancelEdit();
-    }
-
+    if (editingIndex !== null && editingIndex !== index) cancelEdit();
     try {
-        input.value = tasks[index];
-        addTaskBtn.textContent = 'Сохранить';
-        editingIndex = index;
-        input.focus();
-        tg.HapticFeedback.impactOccurred('medium');
-    } catch (e) {
-        console.error("Error in startEditTask:", e);
-        tg.showAlert("Не удалось начать редактирование.");
-        cancelEdit();
-    }
+        input.value = tasks[index]; addTaskBtn.textContent = 'Сохранить'; editingIndex = index; input.focus(); tg.HapticFeedback.impactOccurred('medium');
+    } catch (e) { console.error("Error in startEditTask:", e); tg.showAlert("Не удалось начать редактирование."); cancelEdit(); }
 }
-
-// Удаление задачи
 function deleteTask(index) {
-    console.log(`Attempting to delete task index: ${index}`);
     if (tasks[index] === undefined) return;
-
     try {
         tg.showConfirm(`Удалить задачу:\n"${tasks[index]}"?`, (confirmed) => {
             if (confirmed) {
-                console.log(`Confirmed deletion for index: ${index}`);
                 try {
                     tasks.splice(index, 1);
-                    if (editingIndex === index) {
-                        cancelEdit();
-                    } else {
-                        renderTasks();
-                    }
-                    saveTasks(); // Сохраняем изменения
-                    tg.HapticFeedback.notificationOccurred('success');
-                } catch (e) {
-                    console.error("Error during task deletion splice/render:", e);
-                    tg.showAlert("Не удалось удалить задачу.");
-                }
-            } else {
-                console.log(`Deletion cancelled for index: ${index}`);
-                tg.HapticFeedback.impactOccurred('light');
-            }
+                    if (editingIndex === index) cancelEdit(); else renderTasks();
+                    saveTasks(); tg.HapticFeedback.notificationOccurred('success');
+                } catch (e) { console.error("Error during task deletion splice/render:", e); tg.showAlert("Не удалось удалить задачу."); }
+            } else { tg.HapticFeedback.impactOccurred('light'); }
         });
-    } catch (e) {
-        console.error("Error calling tg.showConfirm:", e);
-        tg.showAlert("Ошибка вызова подтверждения удаления.");
-    }
+    } catch (e) { console.error("Error calling tg.showConfirm:", e); tg.showAlert("Ошибка вызова подтверждения удаления."); }
 }
-
-// Отмена режима редактирования
 function cancelEdit() {
-    console.log("Cancelling edit mode.");
     const input = document.getElementById('new-task-input');
     const addTaskBtn = document.getElementById('add-task-btn');
     if (!input || !addTaskBtn) return;
-
-    editingIndex = null;
-    addTaskBtn.textContent = 'Добавить';
-    input.value = '';
+    editingIndex = null; addTaskBtn.textContent = 'Добавить'; input.value = '';
 }
 
 // --- Инициализация приложения ---
 function initializeApp() {
     console.log("initializeApp called.");
-
-    // --- Получаем элементы ---
     const addTaskBtn = document.getElementById('add-task-btn');
     const newTaskInput = document.getElementById('new-task-input');
     const sendTasksBtn = document.getElementById('send-tasks-btn');
@@ -270,7 +168,6 @@ function initializeApp() {
     const taskListUl = document.getElementById('task-list');
     const userInfoDiv = document.getElementById('user-info');
 
-    // --- Проверка элементов ---
     if (!addTaskBtn || !newTaskInput || !sendTasksBtn || !closeBtn || !taskListUl || !userInfoDiv) {
         console.error("Critical element(s) not found! Aborting initialization.");
         document.body.innerHTML = '<div style="color: #ff7b7b; padding: 20px; text-align: center;">Ошибка загрузки интерфейса. Пожалуйста, перезапустите приложение.</div>';
@@ -279,102 +176,39 @@ function initializeApp() {
     }
     console.log("All critical elements found.");
 
-    // --- Настройка темы и Telegram API ---
     try {
-        setThemeClass();
-        tg.onEvent('themeChanged', setThemeClass);
-        tg.expand();
-        tg.ready();
+        setThemeClass(); tg.onEvent('themeChanged', setThemeClass); tg.expand(); tg.ready();
         console.log("Telegram WebApp SDK initialized and ready.");
-    } catch (e) {
-        console.error("Error initializing Telegram WebApp features:", e);
-        try { tg.showAlert("Не удалось инициализировать функции Telegram."); } catch (ignore) {}
-    }
+    } catch (e) { console.error("Error initializing Telegram WebApp features:", e); try { tg.showAlert("Не удалось инициализировать функции Telegram."); } catch (ignore) {} }
 
-    // --- Отображение данных пользователя ---
     try {
         if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-            const user = tg.initDataUnsafe.user;
-            userInfoDiv.innerHTML = `Задачи для: <strong>${user.first_name || 'User'}</strong>`;
-        } else {
-            userInfoDiv.innerHTML = 'Данные пользователя недоступны';
-        }
+            const user = tg.initDataUnsafe.user; userInfoDiv.innerHTML = `Задачи для: <strong>${user.first_name || 'User'}</strong>`;
+        } else { userInfoDiv.innerHTML = 'Данные пользователя недоступны'; }
     } catch(e) { console.error("Error displaying user info:", e); userInfoDiv.innerHTML = 'Ошибка отображения данных'; }
 
-    // --- Загрузка и Инициализация списка задач ---
-    loadTasks();
-    renderTasks();
+    loadTasks(); renderTasks();
 
-    // --- Обработчики событий ---
     try {
         addTaskBtn.addEventListener('click', addTask);
-        newTaskInput.addEventListener('keypress', (event) => {
-            if (event.key === 'Enter') { event.preventDefault(); addTask(); }
-        });
-
-        // Делегирование событий для кнопок в списке
+        newTaskInput.addEventListener('keypress', (event) => { if (event.key === 'Enter') { event.preventDefault(); addTask(); } });
         taskListUl.addEventListener('click', (event) => {
-            const target = event.target;
-            const editButton = target.closest('.edit-btn');
-            const deleteButton = target.closest('.delete-btn');
-
-            if (editButton) {
-                const index = parseInt(editButton.dataset.index, 10);
-                if (!isNaN(index)) startEditTask(index);
-                return;
-            }
-            if (deleteButton) {
-                const index = parseInt(deleteButton.dataset.index, 10);
-                if (!isNaN(index)) deleteTask(index);
-                return;
-            }
+            const target = event.target; const editButton = target.closest('.edit-btn'); const deleteButton = target.closest('.delete-btn');
+            if (editButton) { const index = parseInt(editButton.dataset.index, 10); if (!isNaN(index)) startEditTask(index); return; }
+            if (deleteButton) { const index = parseInt(deleteButton.dataset.index, 10); if (!isNaN(index)) deleteTask(index); return; }
         });
-
-        // Отправка Задач Боту (для пересылки пользователю)
         sendTasksBtn.addEventListener('click', () => {
-             console.log("sendTasksBtn clicked.");
-             if (tasks.length === 0) {
-                 tg.HapticFeedback.notificationOccurred('warning');
-                 tg.showAlert("Список задач пуст.");
-                 return;
-             }
-             if (editingIndex !== null) cancelEdit(); // Отменяем редактирование
-
-             const dataToSend = JSON.stringify({
-                 action: "send_tasks_to_user", // Указываем боту на пересылку
-                 tasks: tasks,
-                 timestamp: new Date().toISOString()
-             });
-
+             if (tasks.length === 0) { tg.HapticFeedback.notificationOccurred('warning'); tg.showAlert("Список задач пуст."); return; }
+             if (editingIndex !== null) cancelEdit();
+             const dataToSend = JSON.stringify({ action: "send_tasks_to_user", tasks: tasks, timestamp: new Date().toISOString() });
              console.log("Sending data to bot for forwarding:", dataToSend);
-             try {
-                 tg.sendData(dataToSend); // Отправляем данные боту
-                 tg.HapticFeedback.notificationOccurred('success');
-                 tg.showAlert("Задачи отправлены боту для пересылки вам!");
-             } catch (e) {
-                 console.error("Error sending data:", e);
-                 tg.showAlert("Ошибка отправки запроса боту.");
-             }
+             try { tg.sendData(dataToSend); tg.HapticFeedback.notificationOccurred('success'); tg.showAlert("Задачи отправлены боту для пересылки вам!");
+             } catch (e) { console.error("Error sending data:", e); tg.showAlert("Ошибка отправки запроса боту."); }
         });
-        console.log("Listener added to sendTasksBtn");
-
-        // Закрытие
-        closeBtn.addEventListener('click', () => {
-            if (editingIndex !== null) cancelEdit(); // Отменяем редактирование
-            try { tg.close(); } catch (e) { console.error("Error closing WebApp:", e); }
-        });
-
+        closeBtn.addEventListener('click', () => { if (editingIndex !== null) cancelEdit(); try { tg.close(); } catch (e) { console.error("Error closing WebApp:", e); } });
         console.log("Event listeners added successfully.");
-
-    } catch (e) {
-        console.error("Error adding event listeners:", e);
-        tg.showAlert("Ошибка настройки интерфейса.");
-    }
+    } catch (e) { console.error("Error adding event listeners:", e); tg.showAlert("Ошибка настройки интерфейса."); }
 }
 
 // --- Запуск инициализации ---
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeApp);
-} else {
-    initializeApp();
-}
+if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initializeApp); } else { initializeApp(); }

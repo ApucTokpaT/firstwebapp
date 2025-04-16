@@ -20,9 +20,9 @@
     <!-- Контейнер для основного контента -->
     <div class="content-wrapper">
         <h1>Мои Задачи</h1>
-        <p>Добавьте новые задачи и отправьте список боту.</p>
+        <p>Добавьте, измените или удалите задачи.</p>
 
-        <!-- Форма добавления задачи -->
+        <!-- Форма добавления/редактирования задачи -->
         <div class="add-task-container">
             <input type="text" id="new-task-input" placeholder="Что нужно сделать?">
             <button id="add-task-btn">Добавить</button>
@@ -32,7 +32,7 @@
         <h2>Список:</h2>
         <ul id="task-list">
             <!-- Задачи будут добавляться сюда через JS -->
-            <li class="no-tasks">Пока задач нет...</li>
+            <li class="no-tasks visible">Загрузка задач...</li>
         </ul>
 
 
@@ -40,7 +40,7 @@
 
         <!-- Обертка для кнопок управления -->
         <div class="button-container">
-            <button id="send-tasks-btn">Отправить Задачи Боту</button>
+            <button id="send-tasks-btn">Отправить Задачи</button>
             <button id="close-btn">Закрыть</button>
         </div>
     </div>

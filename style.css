@@ -57,29 +57,24 @@ body {
     box-sizing: border-box;
     background-color: var(--tg-theme-bg-color); /* Простой фон */
     color: var(--tg-theme-text-color);
-    display: flex; /* Для центрирования контейнера */
-    flex-direction: column; /* Элементы идут сверху вниз */
-    align-items: center; /* Центрируем контейнер */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
-    -webkit-font-smoothing: antialiased; /* Улучшение рендеринга шрифтов */
+    -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
 /* --- Контейнер для контента --- */
 .content-wrapper {
-    /* Убираем фон и тени с body, переносим на контейнер */
-    background-color: var(--tg-theme-secondary-bg-color); /* Используем вторичный цвет */
+    background-color: var(--tg-theme-secondary-bg-color);
     padding: 25px 20px;
     border-radius: 12px;
-    /* Легкая тень для светлой темы */
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-    border: 1px solid rgba(var(--tg-theme-text-color-rgb), 0.05); /* Очень легкая граница */
-
+    border: 1px solid rgba(var(--tg-theme-text-color-rgb), 0.05);
     max-width: 600px;
-    width: 100%; /* Занимает всю доступную ширину (с учетом padding body) */
+    width: 100%;
     box-sizing: border-box;
-
-    /* Убираем размытие */
     backdrop-filter: none;
 
     /* Анимация появления */
@@ -90,16 +85,16 @@ body {
 
 /* Темная тема: Настраиваем контейнер */
 body.dark .content-wrapper {
-    background-color: var(--tg-theme-dark-secondary-bg-color); /* Явный фон */
-    border: 1px solid rgba(var(--tg-theme-dark-text-color-rgb), 0.1); /* Чуть заметнее граница */
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2); /* Более заметная тень */
+    background-color: var(--tg-theme-dark-secondary-bg-color);
+    border: 1px solid rgba(var(--tg-theme-dark-text-color-rgb), 0.1);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
 }
 
 /* --- Стили текста --- */
 h1 {
     font-family: 'Raleway', sans-serif;
     font-weight: 700;
-    font-size: clamp(1.8em, 5vw, 2.2em); /* Адаптивный размер */
+    font-size: clamp(1.8em, 5vw, 2.2em);
     margin-top: 0;
     margin-bottom: 12px;
     color: var(--tg-theme-text-color);
@@ -107,7 +102,7 @@ h1 {
 }
 
 p {
-    font-size: clamp(0.95em, 3vw, 1.05em); /* Адаптивный размер */
+    font-size: clamp(0.95em, 3vw, 1.05em);
     line-height: 1.6;
     color: var(--tg-theme-hint-color);
     margin-bottom: 20px;
@@ -116,51 +111,53 @@ p {
 #user-info {
     font-size: 0.85em;
     font-weight: 400;
-    margin: 15px 0; /* Отступы сверху/снизу */
+    margin: 15px 0;
     color: var(--tg-theme-hint-color);
     padding: 6px 10px;
-    background-color: rgba(var(--tg-theme-bg-color-rgb), 0.7); /* Фон на базе основного фона */
+    background-color: rgba(var(--tg-theme-bg-color-rgb), 0.7);
     border-radius: 5px;
     display: inline-block;
 }
 body.dark #user-info {
-     background-color: rgba(var(--tg-theme-dark-bg-color-rgb), 0.7); /* Фон для темной темы */
+     background-color: rgba(var(--tg-theme-dark-bg-color-rgb), 0.7);
 }
 
 /* === Стили для Списка Задач === */
 
 .add-task-container {
     display: flex;
-    gap: 8px; /* Чуть меньше промежуток */
+    gap: 8px;
     margin-bottom: 20px;
-    align-items: stretch; /* Растягиваем элементы по высоте */
+    align-items: stretch;
     opacity: 0;
     animation: fadeInSlideUp 0.6s 0.3s ease-out forwards;
-    position: relative; /* Для z-index, если понадобится */
+    position: relative;
     z-index: 1;
+    flex-wrap: nowrap;
 }
 
 #new-task-input {
     flex-grow: 1;
+    min-width: 0; /* Позволяет инпуту сжиматься */
     padding: 10px 14px;
     border: 1px solid rgba(var(--tg-theme-text-color-rgb), 0.2);
     border-radius: 8px;
     font-size: 1em;
     font-family: 'Poppins', sans-serif;
-    background-color: var(--tg-theme-bg-color); /* Явный фон (основной) */
+    background-color: var(--tg-theme-bg-color);
     color: var(--tg-theme-text-color);
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    -webkit-appearance: none; /* Убираем стандартный вид iOS */
+    -webkit-appearance: none;
     appearance: none;
-    min-height: 44px; /* Минимальная высота для удобства касания */
-    box-sizing: border-box; /* Учитываем padding/border в высоте */
-    touch-action: manipulation; /* Помощь с обработкой касаний */
-    z-index: 2; /* Выше контейнера */
-    position: relative; /* Для z-index */
+    min-height: 44px;
+    box-sizing: border-box;
+    touch-action: manipulation;
+    z-index: 2;
+    position: relative;
 }
 body.dark #new-task-input {
-    background-color: var(--tg-theme-dark-bg-color); /* Явный фон для темной */
-    border-color: rgba(var(--tg-theme-dark-hint-color-rgb), 0.4); /* Граница на базе hint */
+    background-color: var(--tg-theme-dark-bg-color);
+    border-color: rgba(var(--tg-theme-dark-hint-color-rgb), 0.4);
     color: var(--tg-theme-dark-text-color);
 }
 body.dark #new-task-input::placeholder {
@@ -184,7 +181,9 @@ body.dark #new-task-input::placeholder {
     flex-shrink: 0;
     z-index: 2;
     position: relative;
-    /* Стили кнопки берутся из общих */
+    padding: 10px 15px; /* Уменьшенные паддинги */
+    box-sizing: border-box;
+    /* Остальные стили кнопки наследуются от общего 'button' */
 }
 
 /* Заголовок списка */
@@ -215,9 +214,7 @@ body.dark h2 {
 
 /* Элементы списка */
 #task-list li {
-    /* Фон как у контейнера, но можно сделать чуть другим */
     background-color: var(--tg-theme-secondary-bg-color);
-    /* Добавим легкую внутреннюю тень для объема */
     box-shadow: inset 0 0 0 1px rgba(var(--tg-theme-text-color-rgb), 0.06);
     padding: 10px 14px;
     margin-bottom: 8px;
@@ -229,25 +226,24 @@ body.dark h2 {
     justify-content: space-between;
     align-items: center;
     word-break: break-word;
-    /* Анимация появления элемента списка (добавляется в JS) */
-    opacity: 0;
-    transform: scale(0.95);
+    opacity: 0; /* Управляется JS классом .visible */
+    transform: scale(0.95); /* Управляется JS классом .visible */
     transition: opacity 0.3s ease, transform 0.3s ease;
 }
 body.dark #task-list li {
     background-color: var(--tg-theme-dark-secondary-bg-color);
     box-shadow: inset 0 0 0 1px rgba(var(--tg-theme-dark-text-color-rgb), 0.1);
     color: var(--tg-theme-dark-text-color);
-    border: none; /* Убираем внешнюю границу, полагаемся на фон/тень */
+    border: none;
 }
 
-/* Анимация появления LI (класс добавляется в JS) */
+/* Анимация появления LI */
 #task-list li.visible {
     opacity: 1;
     transform: scale(1);
 }
 
-
+/* Сообщение "нет задач" */
 #task-list .no-tasks {
     background-color: transparent;
     box-shadow: none;
@@ -256,11 +252,15 @@ body.dark #task-list li {
     font-style: italic;
     text-align: center;
     padding: 15px;
-    opacity: 1; /* Сразу видим */
-    transform: none; /* Без анимации */
+    opacity: 0; /* Управляется JS классом .visible */
+    transform: scale(1); /* Без анимации масштаба */
+    transition: opacity 0.3s ease;
 }
 body.dark #task-list .no-tasks {
      background-color: transparent;
+}
+#task-list .no-tasks.visible {
+    opacity: 1;
 }
 
 /* --- Контейнер для кнопок --- */
@@ -268,10 +268,10 @@ body.dark #task-list .no-tasks {
     margin-top: 20px;
     padding-top: 15px;
     border-top: 1px solid rgba(var(--tg-theme-text-color-rgb), 0.1);
-    display: flex; /* Расположим кнопки */
-    justify-content: space-around; /* Распределим место */
-    flex-wrap: wrap; /* Перенос кнопок на моб */
-    gap: 10px; /* Промежуток */
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 body.dark .button-container {
     border-top-color: rgba(var(--tg-theme-dark-text-color-rgb), 0.15);
@@ -281,9 +281,10 @@ body.dark .button-container {
 button {
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
-    font-size: 0.95em; /* Чуть меньше */
-    padding: 10px 20px; /* Чуть меньше */
-    margin: 0; /* Убираем внешние отступы, используем gap */
+    font-size: 0.95em;
+    /* padding задается индивидуально или здесь для всех кроме #add-task-btn */
+    padding: 10px 15px;
+    margin: 0;
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -291,30 +292,29 @@ button {
     color: var(--tg-theme-button-text-color);
     box-shadow: 0 3px 8px rgba(var(--tg-theme-button-color-rgb, 13, 110, 253), 0.25);
     transition: all 0.2s ease;
-    -webkit-tap-highlight-color: transparent; /* Убрать выделение при касании */
-    min-height: 42px; /* Мин. высота для касания */
+    -webkit-tap-highlight-color: transparent;
+    min-height: 42px;
     box-sizing: border-box;
 
     opacity: 0;
     transform: translateY(10px);
-    animation: fadeInSlideUp 0.5s 0.6s ease-out forwards; /* Общая анимация */
+    animation: fadeInSlideUp 0.5s 0.6s ease-out forwards;
 }
 
-/* Отдельная анимация для кнопки Добавить */
+/* Анимация для кнопки Добавить */
 #add-task-btn {
-    /* Используем общую анимацию кнопок, т.к. она рядом с инпутом */
     animation: fadeInSlideUp 0.5s 0.35s ease-out forwards;
 }
 
 button:hover {
     filter: brightness(1.1);
     box-shadow: 0 4px 12px rgba(var(--tg-theme-button-color-rgb, 13, 110, 253), 0.35);
-    transform: translateY(-2px); /* Меньший подъем */
+    transform: translateY(-2px);
 }
 
 button:active {
     filter: brightness(0.95);
-    transform: translateY(0px) scale(0.98); /* Небольшое сжатие */
+    transform: translateY(0px) scale(0.98);
     box-shadow: 0 1px 4px rgba(var(--tg-theme-button-color-rgb, 13, 110, 253), 0.2);
 }
 
@@ -325,7 +325,7 @@ button:active {
 #close-btn:hover {
      box-shadow: 0 4px 12px rgba(var(--tg-theme-hint-color-rgb, 108, 117, 125), 0.3);
      transform: translateY(-2px);
-     filter: brightness(1.05); /* Небольшое осветление */
+     filter: brightness(1.05);
 }
  #close-btn:active {
      box-shadow: 0 1px 4px rgba(var(--tg-theme-hint-color-rgb, 108, 117, 125), 0.2);
@@ -333,12 +333,74 @@ button:active {
      filter: brightness(0.95);
 }
 
+/* === Стили для кнопок управления задачей === */
+.task-actions {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-left: 10px;
+}
+
+.task-actions button {
+    /* Сбрасываем стили основной кнопки */
+    background: none;
+    border: none;
+    box-shadow: none;
+    padding: 5px;
+    margin: 0;
+    cursor: pointer;
+    font-size: 1.2em;
+    line-height: 1;
+    color: var(--tg-theme-hint-color);
+    transition: color 0.2s ease, transform 0.2s ease;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    min-height: 28px;
+    box-sizing: border-box;
+    /* Убираем анимацию появления основной кнопки */
+    opacity: 1;
+    transform: none;
+    animation: none;
+}
+
+.task-actions button:hover {
+    color: var(--tg-theme-text-color);
+    transform: scale(1.1);
+    /* Убираем filter */
+    filter: none;
+}
+body.dark .task-actions button:hover {
+    color: var(--tg-theme-dark-text-color);
+}
+
+.task-actions .delete-btn:hover {
+    color: #dc3545;
+}
+body.dark .task-actions .delete-btn:hover {
+    color: #f06a78;
+}
+
+.task-actions button:active {
+    transform: scale(0.95);
+    /* Убираем filter */
+    filter: none;
+}
+
+/* Span для текста задачи */
+#task-list li span.task-text {
+    flex-grow: 1;
+    margin-right: 5px;
+    min-width: 0; /* Позволяет тексту сжиматься */
+}
 
 /* --- Ключевые кадры для анимации --- */
 @keyframes fadeInSlideUp {
     from {
         opacity: 0;
-        transform: translateY(15px); /* Уменьшаем сдвиг */
+        transform: translateY(15px);
     }
     to {
         opacity: 1;

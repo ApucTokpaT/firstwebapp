@@ -5,9 +5,9 @@ const STORAGE_KEY = 'todoAppTasks'; // Ключ для localStorage
 
 // --- Глобальные переменные ---
 let tasks = [];
-let editingIndex = null;
+let editingIndex = null; // Индекс задачи, которая редактируется, null - если никакая
 
-// --- Функция установки темы (минимальные изменения, т.к. фон всегда темный) ---
+// --- Функция установки темы ---
 function setThemeClass() {
     console.log("setThemeClass called. Scheme:", tg.colorScheme);
     try {
@@ -39,7 +39,6 @@ function setThemeClass() {
         root.style.setProperty('--tg-theme-button-color-rgb', hexToRgb(params.button_color || currentDefaults.button) || '58, 134, 255');
         root.style.setProperty('--tg-theme-secondary-bg-color-rgb', hexToRgb(params.secondary_bg_color) || '40, 48, 56');
 
-
         // Класс dark больше не нужен для фона, но может использоваться для других элементов
         document.body.classList.toggle('dark', true); // Всегда считаем темной темой для консистентности
 
@@ -60,12 +59,12 @@ function loadTasks() {
             console.log("Tasks loaded successfully:", tasks);
         } catch (e) {
             console.error("Error parsing tasks from localStorage:", e);
-            tasks = []; // Начинаем с пустого списка в случае ошибки
-            localStorage.removeItem(STORAGE_KEY); // Очищаем некорректные данные
+            tasks = [];
+            localStorage.removeItem(STORAGE_KEY);
         }
     } else {
         console.log("No tasks found in localStorage.");
-        tasks = []; // Убедимся, что массив пуст, если ничего не найдено
+        tasks = [];
     }
 }
 
@@ -77,7 +76,6 @@ function saveTasks() {
         console.log("Tasks saved successfully.");
     } catch (e) {
         console.error("Error saving tasks to localStorage:", e);
-        // Уведомляем пользователя, если сохранение не удалось
         try {
              tg.showAlert("Не удалось сохранить задачи. Возможно, хранилище переполнено.");
         } catch (alertError) { console.error("Failed to show save error alert:", alertError); }
@@ -85,7 +83,7 @@ function saveTasks() {
 }
 
 
-// --- Функции для работы со списком задач (без изменений в логике, но вызываем saveTasks) ---
+// --- Функции для работы со списком задач ---
 
 // Рендер списка задач
 function renderTasks() {
@@ -174,13 +172,13 @@ function addTask() {
             editingIndex = null;
             addTaskBtn.textContent = 'Добавить';
             input.value = '';
-            renderTasks(); // Перерисовываем
+            renderTasks();
             saveTasks(); // Сохраняем изменения
             tg.HapticFeedback.notificationOccurred('success');
         } else {
             tasks.push(taskText);
             input.value = '';
-            renderTasks(); // Перерисовываем
+            renderTasks();
             saveTasks(); // Сохраняем изменения
             tg.HapticFeedback.impactOccurred('light');
         }
@@ -225,11 +223,11 @@ function deleteTask(index) {
             if (confirmed) {
                 console.log(`Confirmed deletion for index: ${index}`);
                 try {
-                    tasks.splice(index, 1); // Удаляем
+                    tasks.splice(index, 1);
                     if (editingIndex === index) {
                         cancelEdit();
                     } else {
-                        renderTasks(); // Перерисовываем
+                        renderTasks();
                     }
                     saveTasks(); // Сохраняем изменения
                     tg.HapticFeedback.notificationOccurred('success');
@@ -275,7 +273,6 @@ function initializeApp() {
     // --- Проверка элементов ---
     if (!addTaskBtn || !newTaskInput || !sendTasksBtn || !closeBtn || !taskListUl || !userInfoDiv) {
         console.error("Critical element(s) not found! Aborting initialization.");
-        // Отображение ошибки пользователю
         document.body.innerHTML = '<div style="color: #ff7b7b; padding: 20px; text-align: center;">Ошибка загрузки интерфейса. Пожалуйста, перезапустите приложение.</div>';
         try { tg.showAlert("Ошибка загрузки интерфейса."); } catch (e) {}
         return;
@@ -284,10 +281,10 @@ function initializeApp() {
 
     // --- Настройка темы и Telegram API ---
     try {
-        setThemeClass(); // Установка темы (адаптированной)
-        tg.onEvent('themeChanged', setThemeClass); // На случай, если тема все же изменится
+        setThemeClass();
+        tg.onEvent('themeChanged', setThemeClass);
         tg.expand();
-        tg.ready(); // Сообщаем TG, что готовы
+        tg.ready();
         console.log("Telegram WebApp SDK initialized and ready.");
     } catch (e) {
         console.error("Error initializing Telegram WebApp features:", e);
@@ -305,8 +302,8 @@ function initializeApp() {
     } catch(e) { console.error("Error displaying user info:", e); userInfoDiv.innerHTML = 'Ошибка отображения данных'; }
 
     // --- Загрузка и Инициализация списка задач ---
-    loadTasks(); // Загружаем задачи перед первым рендерингом
-    renderTasks(); // Отображаем загруженный или пустой список
+    loadTasks();
+    renderTasks();
 
     // --- Обработчики событий ---
     try {
@@ -333,7 +330,7 @@ function initializeApp() {
             }
         });
 
-        // Отправка Задач Боту
+        // Отправка Задач Боту (для пересылки пользователю)
         sendTasksBtn.addEventListener('click', () => {
              console.log("sendTasksBtn clicked.");
              if (tasks.length === 0) {
@@ -343,25 +340,27 @@ function initializeApp() {
              }
              if (editingIndex !== null) cancelEdit(); // Отменяем редактирование
 
+             // --- ИЗМЕНЕНИЕ ACTION ЗДЕСЬ ---
              const dataToSend = JSON.stringify({
-                 action: "send_task_list",
-                 tasks: tasks, // Отправляем текущие задачи
+                 action: "send_tasks_to_user", // Указываем боту на пересылку
+                 tasks: tasks,
                  timestamp: new Date().toISOString()
              });
-             console.log("Sending data:", dataToSend);
+             // -------------------------------
+
+             console.log("Sending data to bot for forwarding:", dataToSend);
              try {
-                 tg.sendData(dataToSend);
+                 tg.sendData(dataToSend); // Отправляем данные боту
                  tg.HapticFeedback.notificationOccurred('success');
-                 tg.showAlert("Задачи отправлены!");
-                 // Опционально: Очистить список после отправки?
-                 // tasks = [];
-                 // saveTasks(); // Сохранить пустой список
-                 // renderTasks();
+                 // --- ИЗМЕНЕНИЕ СООБЩЕНИЯ ЗДЕСЬ ---
+                 tg.showAlert("Задачи отправлены боту для пересылки вам!");
+                 // ----------------------------------
              } catch (e) {
                  console.error("Error sending data:", e);
-                 tg.showAlert("Ошибка отправки данных.");
+                 tg.showAlert("Ошибка отправки запроса боту.");
              }
         });
+        console.log("Listener added to sendTasksBtn");
 
         // Закрытие
         closeBtn.addEventListener('click', () => {

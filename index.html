@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Alex TG Web App</title>
+    <title>TG Web App: Список Задач</title>
 
     <!-- Подключение шрифтов (Poppins и Raleway) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,14 +19,28 @@
 <body>
     <!-- Контейнер для основного контента -->
     <div class="content-wrapper">
-        <h1>Добро пожаловать!</h1>
-        <p>Это обновленное веб-приложение Telegram с улучшенным дизайном.</p>
+        <h1>Мои Задачи</h1>
+        <p>Добавьте новые задачи и отправьте список боту.</p>
+
+        <!-- Форма добавления задачи -->
+        <div class="add-task-container">
+            <input type="text" id="new-task-input" placeholder="Что нужно сделать?">
+            <button id="add-task-btn">Добавить</button>
+        </div>
+
+        <!-- Список задач -->
+        <h2>Список:</h2>
+        <ul id="task-list">
+            <!-- Задачи будут добавляться сюда через JS -->
+            <li class="no-tasks">Пока задач нет...</li>
+        </ul>
+
 
         <div id="user-info">Загрузка данных пользователя...</div>
 
-        <!-- Обертка для кнопок -->
+        <!-- Обертка для кнопок управления -->
         <div class="button-container">
-            <button id="send-data-btn">Отправить Пример</button>
+            <button id="send-tasks-btn">Отправить Задачи Боту</button>
             <button id="close-btn">Закрыть</button>
         </div>
     </div>

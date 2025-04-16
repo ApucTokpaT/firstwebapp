@@ -6,9 +6,7 @@ let tasks = []; // Массив для хранения задач
 
 // --- Функция для установки CSS переменных темы ---
 function setThemeClass() {
-    console.log("Theme Changed or Initial Load:", tg.themeParams);
-    console.log("Color Scheme:", tg.colorScheme);
-
+    console.log("setThemeClass called. Scheme:", tg.colorScheme); // DEBUG
     const root = document.documentElement;
     const themeParams = tg.themeParams;
 
@@ -18,163 +16,202 @@ function setThemeClass() {
         return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : null;
     };
 
-    // Устанавливаем основные цвета
-    root.style.setProperty('--tg-theme-bg-color', themeParams.bg_color || '#ffffff');
-    root.style.setProperty('--tg-theme-text-color', themeParams.text_color || '#000000');
-    root.style.setProperty('--tg-theme-hint-color', themeParams.hint_color || '#999999');
-    root.style.setProperty('--tg-theme-link-color', themeParams.link_color || '#2e7ddb');
-    root.style.setProperty('--tg-theme-button-color', themeParams.button_color || '#40a7e3');
-    root.style.setProperty('--tg-theme-button-text-color', themeParams.button_text_color || '#ffffff');
-    root.style.setProperty('--tg-theme-secondary-bg-color', themeParams.secondary_bg_color || '#f3f3f3');
+    // Цвета по умолчанию (если что-то пойдет не так)
+    const defaults = {
+        light: { bg: '#ffffff', text: '#212529', hint: '#6c757d', link: '#0d6efd', button: '#0d6efd', button_text: '#ffffff', secondary_bg: '#f8f9fa' },
+        dark: { bg: '#181e25', text: '#dee2e6', hint: '#adb5bd', link: '#6ea8fe', button: '#0d6efd', button_text: '#ffffff', secondary_bg: '#2a3038' }
+    };
+    const currentDefaults = tg.colorScheme === 'dark' ? defaults.dark : defaults.light;
+
+    // Устанавливаем основные цвета, используя || оператор для дефолтных значений
+    root.style.setProperty('--tg-theme-bg-color', themeParams.bg_color || currentDefaults.bg);
+    root.style.setProperty('--tg-theme-text-color', themeParams.text_color || currentDefaults.text);
+    root.style.setProperty('--tg-theme-hint-color', themeParams.hint_color || currentDefaults.hint);
+    root.style.setProperty('--tg-theme-link-color', themeParams.link_color || currentDefaults.link);
+    root.style.setProperty('--tg-theme-button-color', themeParams.button_color || currentDefaults.button);
+    root.style.setProperty('--tg-theme-button-text-color', themeParams.button_text_color || currentDefaults.button_text);
+    root.style.setProperty('--tg-theme-secondary-bg-color', themeParams.secondary_bg_color || currentDefaults.secondary_bg);
 
     // Устанавливаем RGB версии
-    root.style.setProperty('--tg-theme-bg-color-rgb', hexToRgb(themeParams.bg_color) || '255, 255, 255');
-    root.style.setProperty('--tg-theme-text-color-rgb', hexToRgb(themeParams.text_color) || '0, 0, 0');
-    root.style.setProperty('--tg-theme-button-color-rgb', hexToRgb(themeParams.button_color) || '64, 167, 227');
-    root.style.setProperty('--tg-theme-hint-color-rgb', hexToRgb(themeParams.hint_color) || '153, 153, 153');
-    root.style.setProperty('--tg-theme-secondary-bg-color-rgb', hexToRgb(themeParams.secondary_bg_color) || '243, 243, 243');
+    root.style.setProperty('--tg-theme-bg-color-rgb', hexToRgb(themeParams.bg_color || currentDefaults.bg) || (tg.colorScheme === 'dark' ? '24, 30, 37' : '255, 255, 255'));
+    root.style.setProperty('--tg-theme-text-color-rgb', hexToRgb(themeParams.text_color || currentDefaults.text) || (tg.colorScheme === 'dark' ? '222, 226, 230' : '33, 37, 41'));
+    root.style.setProperty('--tg-theme-hint-color-rgb', hexToRgb(themeParams.hint_color || currentDefaults.hint) || (tg.colorScheme === 'dark' ? '173, 181, 189' : '108, 117, 125'));
+    root.style.setProperty('--tg-theme-button-color-rgb', hexToRgb(themeParams.button_color || currentDefaults.button) || '13, 110, 253');
+    root.style.setProperty('--tg-theme-secondary-bg-color-rgb', hexToRgb(themeParams.secondary_bg_color || currentDefaults.secondary_bg) || (tg.colorScheme === 'dark' ? '42, 48, 56' : '248, 249, 250'));
 
+    // Добавляем/удаляем класс dark
     document.body.classList.toggle('dark', tg.colorScheme === 'dark');
+    console.log("Dark class toggled:", document.body.classList.contains('dark')); // DEBUG
 }
 
 // --- Функции для работы со списком задач ---
 
 // Рендер (отображение) списка задач в HTML
 function renderTasks() {
+    console.log("renderTasks called. Current tasks:", tasks); // DEBUG
     const taskList = document.getElementById('task-list');
+    if (!taskList) {
+        console.error("Error: task-list element not found!"); // DEBUG
+        return;
+    }
     taskList.innerHTML = ''; // Очищаем текущий список
 
     if (tasks.length === 0) {
+        console.log("No tasks to render, showing 'no tasks' message."); // DEBUG
         taskList.innerHTML = '<li class="no-tasks">Пока задач нет...</li>';
         return;
     }
 
     tasks.forEach((taskText, index) => {
+        console.log(`Rendering task ${index}: ${taskText}`); // DEBUG
         const listItem = document.createElement('li');
         listItem.textContent = taskText;
-        // Можно добавить data-атрибут для идентификации, если нужно удаление/редактирование
         listItem.dataset.index = index;
+        // Возможно, добавим анимацию появления для каждой задачи
+        listItem.style.opacity = '0';
+        listItem.style.transform = 'translateY(10px)';
+        listItem.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
         taskList.appendChild(listItem);
-        // TODO: В будущем добавить кнопку удаления/редактирования сюда
+        // Форсируем перерасчет стилей для анимации
+        setTimeout(() => {
+            listItem.style.opacity = '1';
+            listItem.style.transform = 'translateY(0)';
+        }, 10); // Небольшая задержка
     });
+    console.log("renderTasks finished."); // DEBUG
 }
 
 // Добавление новой задачи
 function addTask() {
+    console.log("addTask function called."); // DEBUG
     const input = document.getElementById('new-task-input');
-    const taskText = input.value.trim(); // trim() убирает пробелы по краям
 
-    if (taskText === "") {
-        tg.showAlert("Пожалуйста, введите текст задачи!");
-        return; // Не добавляем пустую задачу
-    }
-
-    tasks.push(taskText); // Добавляем в массив
-    input.value = ''; // Очищаем поле ввода
-    renderTasks(); // Обновляем отображение списка
-    tg.HapticFeedback.impactOccurred('light'); // Вибрация при добавлении
-}
-
-// --- Первоначальная настройка и события ---
-setThemeClass(); // Вызываем сразу при загрузке
-tg.onEvent('themeChanged', setThemeClass); // И при смене темы
-
-tg.expand(); // Развернуть окно
-
-// --- Получаем элементы ---
-const userInfoDiv = document.getElementById('user-info');
-const sendTasksBtn = document.getElementById('send-tasks-btn'); // Переименовали кнопку
-const closeBtn = document.getElementById('close-btn');
-const addTaskBtn = document.getElementById('add-task-btn');
-const newTaskInput = document.getElementById('new-task-input');
-const taskListUl = document.getElementById('task-list');
-
-// --- Отображение данных пользователя ---
-if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-    const user = tg.initDataUnsafe.user;
-    userInfoDiv.innerHTML = `Пользователь: <strong>${user.first_name || 'Юзер'}</strong> (ID: ${user.id})`;
-} else {
-    userInfoDiv.innerHTML = 'Не удалось получить данные пользователя.';
-}
-
-// --- Инициализация списка задач ---
-// TODO: В будущем здесь можно будет загружать задачи из localStorage
-renderTasks(); // Отображаем начальное состояние списка (пустое)
-
-// --- Обработчики событий ---
-
-// Добавление задачи по клику на кнопку
-addTaskBtn.addEventListener('click', addTask);
-
-// Добавление задачи по нажатию Enter в поле ввода
-newTaskInput.addEventListener('keypress', (event) => {
-    if (event.key === 'Enter') {
-        event.preventDefault(); // Предотвращаем стандартное поведение (если есть форма)
-        addTask();
-    }
-});
-
-// Отправка списка задач боту
-sendTasksBtn.addEventListener('click', () => {
-    if (tasks.length === 0) {
-        tg.showAlert("Список задач пуст. Добавьте что-нибудь!");
+    if (!input) {
+        console.error("Error: new-task-input element not found!"); // DEBUG
+        tg.showAlert("Произошла ошибка: не найдено поле ввода.");
         return;
     }
 
-    const dataToSend = JSON.stringify({
-        action: "send_task_list",
-        tasks: tasks, // Отправляем массив задач
-        timestamp: new Date().toISOString()
-    });
+    const taskText = input.value.trim();
+    console.log("Task text from input:", taskText); // DEBUG
 
-    tg.sendData(dataToSend);
-    tg.HapticFeedback.notificationOccurred('success'); // Вибрация успеха
-    // Опционально: Очистить список после отправки?
-    // tasks = [];
-    // renderTasks();
-    // tg.showAlert("Список задач отправлен!", () => { tg.close(); }); // Показать сообщение и закрыть
-});
+    if (taskText === "") {
+        console.log("Task text is empty, showing alert."); // DEBUG
+        tg.showAlert("Пожалуйста, введите текст задачи!");
+        return;
+    }
 
-// Закрытие Web App
-closeBtn.addEventListener('click', () => {
-    tg.close();
-});
+    tasks.push(taskText);
+    console.log("Task pushed to array. New tasks array:", tasks); // DEBUG
+    input.value = ''; // Очищаем поле ввода
+    renderTasks(); // Обновляем отображение списка
+    tg.HapticFeedback.impactOccurred('light');
+}
 
-// --- Настройка MainButton (опционально) ---
-// Можно настроить MainButton на отправку задач
-/*
-if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-    tg.MainButton.setText("Отправить Задачи");
-    tg.MainButton.color = tg.themeParams.button_color || '#40a7e3';
-    tg.MainButton.textColor = tg.themeParams.button_text_color || '#ffffff';
+// --- Первоначальная настройка и события ---
 
-    // Показываем кнопку только если есть задачи
-    function updateMainButtonVisibility() {
-         if (tasks.length > 0 && !tg.MainButton.isVisible) {
-             tg.MainButton.show();
-         } else if (tasks.length === 0 && tg.MainButton.isVisible) {
-             tg.MainButton.hide();
+// Обернем основной код в DOMContentLoaded, чтобы гарантировать доступность DOM
+document.addEventListener('DOMContentLoaded', () => {
+    console.log("DOM fully loaded and parsed."); // DEBUG
+
+    // --- Получаем элементы ---
+    const userInfoDiv = document.getElementById('user-info');
+    const sendTasksBtn = document.getElementById('send-tasks-btn');
+    const closeBtn = document.getElementById('close-btn');
+    const addTaskBtn = document.getElementById('add-task-btn');
+    const newTaskInput = document.getElementById('new-task-input');
+    const taskListUl = document.getElementById('task-list'); // Получаем здесь, но используем в renderTasks
+
+    // --- Проверяем, нашлись ли элементы ---
+    console.log("Elements:", { userInfoDiv, sendTasksBtn, closeBtn, addTaskBtn, newTaskInput, taskListUl }); // DEBUG
+    if (!addTaskBtn || !newTaskInput || !sendTasksBtn || !closeBtn || !taskListUl) {
+        console.error("One or more critical elements not found!");
+        // Можно показать пользователю сообщение об ошибке
+        document.body.innerHTML = '<div style="color: red; padding: 20px;">Ошибка загрузки интерфейса. Пожалуйста, попробуйте перезапустить приложение.</div>';
+        return; // Прерываем выполнение, если основных элементов нет
+    }
+
+    // --- Установка темы и расширение окна ---
+    try {
+        setThemeClass(); // Вызываем сразу
+        tg.onEvent('themeChanged', setThemeClass); // И при смене темы
+        tg.expand(); // Развернуть окно
+    } catch (e) {
+        console.error("Error initializing Telegram WebApp features:", e);
+    }
+
+
+    // --- Отображение данных пользователя ---
+    if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+        const user = tg.initDataUnsafe.user;
+        if (userInfoDiv) {
+             userInfoDiv.innerHTML = `Пользователь: <strong>${user.first_name || 'Юзер'}</strong> (ID: ${user.id})`;
+        }
+    } else {
+         if (userInfoDiv) {
+             userInfoDiv.innerHTML = 'Не удалось получить данные пользователя.';
          }
     }
-    // Вызывать updateMainButtonVisibility() после каждого добавления/удаления задачи и при инициализации
 
-    tg.MainButton.onClick(() => {
-        if (!tg.MainButton.isVisible || tg.MainButton.isLoading || tasks.length === 0) return;
+    // --- Инициализация списка задач ---
+    renderTasks(); // Отображаем начальное состояние списка
 
-        tg.MainButton.showProgress();
-        tg.MainButton.disable();
+    // --- Обработчики событий ---
 
-        const dataToSend = JSON.stringify({ action: "main_button_tasks", tasks: tasks, ts: new Date().toISOString() });
-        tg.sendData(dataToSend);
+    // Добавление задачи по клику на кнопку
+    addTaskBtn.addEventListener('click', addTask);
+    console.log("Click listener added to addTaskBtn"); // DEBUG
 
-        tg.showAlert("Задачи отправлены через Main Button!", () => {
-             tg.MainButton.hideProgress();
-             // tg.MainButton.enable();
-             updateMainButtonVisibility(); // Обновить состояние кнопки
-             // tg.close();
-        });
+    // Добавление задачи по нажатию Enter в поле ввода
+    newTaskInput.addEventListener('keypress', (event) => {
+        // console.log("Keypress event:", event.key); // DEBUG (слишком много логов)
+        if (event.key === 'Enter') {
+            console.log("Enter key pressed in input."); // DEBUG
+            event.preventDefault(); // Предотвращаем стандартное поведение
+            addTask();
+        }
     });
+     console.log("Keypress listener added to newTaskInput"); // DEBUG
 
-    updateMainButtonVisibility(); // Первичная проверка при загрузке
-}
-*/
+    // Отправка списка задач боту
+    sendTasksBtn.addEventListener('click', () => {
+        console.log("sendTasksBtn clicked."); // DEBUG
+        if (tasks.length === 0) {
+            console.log("Task list is empty, showing alert."); // DEBUG
+            tg.showAlert("Список задач пуст. Добавьте что-нибудь!");
+            return;
+        }
+
+        const dataToSend = JSON.stringify({
+            action: "send_task_list",
+            tasks: tasks,
+            timestamp: new Date().toISOString()
+        });
+        console.log("Sending data:", dataToSend); // DEBUG
+
+        try {
+            tg.sendData(dataToSend);
+            tg.HapticFeedback.notificationOccurred('success');
+            // Опционально: очистка списка и закрытие
+            // tasks = [];
+            // renderTasks();
+            // tg.showAlert("Список задач отправлен!", () => { tg.close(); });
+        } catch (e) {
+            console.error("Error sending data:", e);
+            tg.showAlert("Ошибка отправки данных.");
+        }
+    });
+    console.log("Click listener added to sendTasksBtn"); // DEBUG
+
+    // Закрытие Web App
+    closeBtn.addEventListener('click', () => {
+        console.log("closeBtn clicked."); // DEBUG
+        try {
+             tg.close();
+        } catch (e) {
+             console.error("Error closing WebApp:", e);
+        }
+    });
+    console.log("Click listener added to closeBtn"); // DEBUG
+
+}); // Конец addEventListener('DOMContentLoaded', ...)

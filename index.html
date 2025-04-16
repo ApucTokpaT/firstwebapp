@@ -3,64 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>TG Web App: Звездные Задачи</title>
+    <title>TG Web App: Продвинутые Задачи</title> <!-- Новый Title -->
 
-    <!-- Подключение шрифтов -->
+    <!-- Шрифты -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Raleway:wght@700&display=swap" rel="stylesheet">
 
-    <!-- Подключение стилей -->
+    <!-- Стили -->
     <link rel="stylesheet" href="style.css">
 
-    <!-- Скрипт Telegram Web App (ОБЯЗАТЕЛЬНО ПЕРЕД ВАШИМ script.js) -->
+    <!-- Telegram Script -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-    <!-- Элементы для фона - ДО основного контента -->
+    <!-- Анимированный фон (как был) -->
     <div class="stars-background">
-        <!-- Статичные далекие звезды -->
-        <div id="stars-static-1"></div>
-        <div id="stars-static-2"></div>
-        <!-- Анимированные элементы -->
-        <div class="moon"></div>
-        <div class="planet planet1"></div>
-        <div class="planet planet2"></div>
-        <div class="shooting-star star1"></div>
-        <div class="shooting-star star2"></div>
-        <div class="shooting-star star3"></div>
-        <div class="shooting-star star4"></div>
+        <div id="stars-static-1"></div> <div id="stars-static-2"></div> <div class="moon"></div>
+        <div class="planet planet1"></div> <div class="planet planet2"></div>
+        <div class="shooting-star star1"></div> <div class="shooting-star star2"></div>
+        <div class="shooting-star star3"></div> <div class="shooting-star star4"></div>
     </div>
 
-    <!-- Контейнер для основного контента -->
+    <!-- Основной контент -->
     <div class="content-wrapper">
-        <h1>Мои Задачи</h1>
-        <p>Добавьте, измените или удалите задачи.</p>
+        <h1>Менеджер Задач</h1>
+        <p>Управляйте своими задачами в космосе.</p>
 
-        <!-- Форма добавления/редактирования задачи -->
-        <div class="add-task-container">
-            <input type="text" id="new-task-input" placeholder="Новая задача в космосе...">
-            <button id="add-task-btn">Добавить</button>
+        <!-- Форма добавления/редактирования -->
+        <div class="task-form">
+            <div class="main-input-group">
+                <input type="text" id="new-task-input" placeholder="Название задачи...">
+                <button id="add-task-btn">Добавить</button>
+            </div>
+            <div class="details-input-group">
+                <div class="input-field">
+                    <label for="priority-select">Приоритет:</label>
+                    <select id="priority-select">
+                        <option value="medium" selected>Средний</option>
+                        <option value="high">Высокий</option>
+                        <option value="low">Низкий</option>
+                    </select>
+                </div>
+                <div class="input-field">
+                    <label for="due-date-input">Срок:</label>
+                    <input type="date" id="due-date-input">
+                </div>
+                 <div class="input-field input-field-tags">
+                    <label for="tags-input">Метки (через ,):</label>
+                    <input type="text" id="tags-input" placeholder="работа, дом...">
+                </div>
+            </div>
+            <button id="cancel-edit-btn" class="secondary-btn" style="display: none;">Отменить редактирование</button>
         </div>
+
+         <!-- Контролы: Фильтры и Счетчик -->
+        <div class="controls">
+            <div class="filters">
+                <button class="filter-btn active" data-filter="all">Все</button>
+                <button class="filter-btn" data-filter="active">Активные</button>
+                <button class="filter-btn" data-filter="completed">Выполненные</button>
+            </div>
+            <div id="task-counter" class="task-counter">Задач: 0</div>
+        </div>
+
 
         <!-- Список задач -->
         <h2>Список:</h2>
         <ul id="task-list">
-            <!-- Задачи будут добавляться сюда через JS -->
+            <!-- Задачи генерятся JS -->
             <li class="no-tasks visible">Загрузка задач...</li>
         </ul>
+
+        <!-- Кнопка Очистки выполненных -->
+        <button id="clear-completed-btn" class="secondary-btn clear-btn">🗑️ Очистить выполненные</button>
 
 
         <div id="user-info">Загрузка данных пользователя...</div>
 
-        <!-- Обертка для кнопок управления -->
+        <!-- Кнопки управления приложением -->
         <div class="button-container">
             <button id="send-tasks-btn">Отправить Задачи</button>
             <button id="close-btn">Закрыть</button>
         </div>
     </div>
 
-    <!-- Ваш скрипт логики -->
+    <!-- Скрипт логики -->
     <script src="script.js"></script>
 </body>
 </html>

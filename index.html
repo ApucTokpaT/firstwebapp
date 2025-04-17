@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>TG Web App: Продвинутые Задачи</title> <!-- Новый Title -->
+    <title>TG Web App: Продвинутые Задачи</title>
 
     <!-- Шрифты -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,7 +17,7 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-    <!-- Анимированный фон (как был) -->
+    <!-- Анимированный фон -->
     <div class="stars-background">
         <div id="stars-static-1"></div> <div id="stars-static-2"></div> <div class="moon"></div>
         <div class="planet planet1"></div> <div class="planet planet2"></div>
@@ -32,9 +32,10 @@
 
         <!-- Форма добавления/редактирования -->
         <div class="task-form">
+             <!-- Убираем кнопку #add-task-btn отсюда -->
             <div class="main-input-group">
                 <input type="text" id="new-task-input" placeholder="Название задачи...">
-                <button id="add-task-btn">Добавить</button>
+                <!-- <button id="add-task-btn">Добавить</button> -->
             </div>
             <div class="details-input-group">
                 <div class="input-field">
@@ -54,7 +55,11 @@
                     <input type="text" id="tags-input" placeholder="работа, дом...">
                 </div>
             </div>
-            <button id="cancel-edit-btn" class="secondary-btn" style="display: none;">Отменить редактирование</button>
+            <!-- Переносим кнопку #add-task-btn сюда -->
+             <div class="form-action-buttons">
+                 <button id="add-task-btn" class="primary-form-btn">Добавить</button>
+                 <button id="cancel-edit-btn" class="secondary-btn" style="display: none;">Отменить</button>
+             </div>
         </div>
 
          <!-- Контролы: Фильтры и Счетчик -->
@@ -71,7 +76,6 @@
         <!-- Список задач -->
         <h2>Список:</h2>
         <ul id="task-list">
-            <!-- Задачи генерятся JS -->
             <li class="no-tasks visible">Загрузка задач...</li>
         </ul>
 

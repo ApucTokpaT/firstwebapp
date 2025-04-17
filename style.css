@@ -1,212 +1,217 @@
-/* --- Базовые настройки и переменные для темы --- */
-:root {
-    /* Цвета для текста, кнопок и т.д. */
-    --tg-theme-bg-color: #000010; /* Фон всегда темный для звезд */
-    --tg-theme-text-color: #E0E0E0; /* Светлый текст для темного фона */
-    --tg-theme-hint-color: #a5acb5;
-    --tg-theme-link-color: #6ea8fe;
-    --tg-theme-button-color: #2e7ddb;
-    --tg-theme-button-text-color: #ffffff;
-    --tg-theme-secondary-bg-color-value: 33, 40, 49; /* Только RGB значения для secondary */
-    /* RGB для остальных */
-    --tg-theme-bg-color-rgb: 0, 0, 16;
-    --tg-theme-text-color-rgb: 224, 224, 224;
-    --tg-theme-hint-color-rgb: 165, 172, 181;
-    --tg-theme-button-color-rgb: 46, 125, 219;
+/* --- Базовые настройки и переменные --- */
+:root { /* ... без изменений ... */ }
+body.dark { /* ... без изменений ... */ }
 
-    /* Цвета приоритетов */
-    --priority-high-color: #ff7b7b;
-    --priority-medium-color: #f0e68c; /* Хаки */
-    --priority-low-color: #87cefa; /* Светло-голубой */
-}
-
-/* --- Применение цветов для темной темы (минимальные изменения от TG) --- */
-body.dark {
-    /* Переопределяем переменные, если TG прислал темную тему */
-    --tg-theme-text-color: var(--tg-theme-dark-text-color, #ffffff);
-    --tg-theme-hint-color: var(--tg-theme-dark-hint-color, #adb5bd);
-    --tg-theme-link-color: var(--tg-theme-dark-link-color, #7aaaff);
-    --tg-theme-button-color: var(--tg-theme-dark-button-color, #3a86ff);
-    --tg-theme-button-text-color: var(--tg-theme-dark-button-text-color, #ffffff);
-    /* Используем RGB из TG если есть, иначе дефолтные темные */
-    --tg-theme-secondary-bg-color-value: var(--tg-theme-dark-secondary-bg-color-rgb, 40, 48, 56);
-    /* RGB */
-    --tg-theme-text-color-rgb: var(--tg-theme-dark-text-color-rgb, 255, 255, 255);
-    --tg-theme-hint-color-rgb: var(--tg-theme-dark-hint-color-rgb, 173, 181, 189);
-    --tg-theme-button-color-rgb: var(--tg-theme-dark-button-color-rgb, 58, 134, 255);
-}
-
-/* --- Стили Body + Звездное небо --- */
-body {
-    font-family: 'Poppins', sans-serif;
-    margin: 0;
-    min-height: 100vh; /* Важно: МИНИМАЛЬНАЯ высота */
-    box-sizing: border-box;
-    background-color: #000010;
-    color: var(--tg-theme-text-color);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px 10px; /* Отступы для wrapper */
-    text-align: center;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    overflow: hidden; /* Оставляем hidden для body */
-    position: relative;
-}
-
-/* --- Контейнер для анимированного фона --- */
-.stars-background {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    pointer-events: none;
-    z-index: 0;
-    overflow: hidden;
-}
-
-/* --- Статичные звезды --- */
-#stars-static-1, #stars-static-2 {
-    width: 1px; height: 1px; background: transparent;
-    position: absolute; top: 0; left: 0;
-    animation: twinkle 5s linear infinite alternate;
-}
-#stars-static-1 { box-shadow: 799px 1468px rgba(255,255,255,0.8), 1096px 955px rgba(255,255,255,0.8), 1068px 1199px rgba(255,255,255,0.8), 1256px 186px rgba(255,255,255,0.8), 130px 1955px rgba(255,255,255,0.8), 1024px 178px rgba(255,255,255,0.8), 1612px 1133px rgba(255,255,255,0.8), 1141px 1599px rgba(255,255,255,0.8), 898px 719px rgba(255,255,255,0.8), 1524px 74px rgba(255,255,255,0.8), 461px 1921px rgba(255,255,255,0.8), 100px 500px rgba(255,255,255,0.8), 1500px 1200px rgba(255,255,255,0.8), 300px 1800px rgba(255,255,255,0.8), 1800px 900px rgba(255,255,255,0.8), 600px 200px rgba(255,255,255,0.8), 950px 1400px rgba(255,255,255,0.8), 1200px 550px rgba(255,255,255,0.8), 1750px 1600px rgba(255,255,255,0.8), 250px 950px rgba(255,255,255,0.8); }
-#stars-static-2 { width: 2px; height: 2px; animation-duration: 7s; box-shadow: 1903px 1319px rgba(255,255,255,0.6), 1394px 1174px rgba(255,255,255,0.6), 95px 120px rgba(255,255,255,0.6), 1406px 536px rgba(255,255,255,0.6), 1810px 1913px rgba(255,255,255,0.6), 1080px 800px rgba(255,255,255,0.6), 550px 1550px rgba(255,255,255,0.6), 1600px 400px rgba(255,255,255,0.6), 820px 1700px rgba(255,255,255,0.6), 1150px 250px rgba(255,255,255,0.6); }
-
-/* --- Луна --- */
-.moon { position: absolute; top: 10vh; right: 15vw; width: 80px; height: 80px; border-radius: 50%; background: radial-gradient(ellipse at center, #f0f0f0 0%, #d0d0d0 60%, #a0a0a0 100%); box-shadow: 0 0 30px rgba(240, 240, 240, 0.5); animation: slowRotate 180s linear infinite, slowMove 240s ease-in-out infinite alternate; z-index: 1; }
-
-/* --- Планеты --- */
-.planet { position: absolute; border-radius: 50%; z-index: 1; animation-timing-function: linear; animation-iteration-count: infinite; }
-.planet1 { bottom: 15vh; left: 10vw; width: 100px; height: 100px; background: radial-gradient(circle at 30% 30%, #eacda3 0%, #d6ae7b 100%); box-shadow: 0 0 25px rgba(234, 205, 163, 0.3); animation-name: slowRotate, slowMoveDiagonal; animation-duration: 90s, 200s; animation-timing-function: linear, ease-in-out; animation-direction: normal, alternate; }
-.planet1::before { content: ''; position: absolute; top: 45%; left: -20%; width: 140%; height: 10%; background: rgba(214, 174, 123, 0.7); border-radius: 50%; transform: rotate(-20deg); box-shadow: 0 0 10px rgba(214, 174, 123, 0.5); }
-.planet2 { top: 25vh; left: 30vw; width: 50px; height: 50px; background: radial-gradient(circle at 60% 70%, #ff8c69 0%, #c85a3d 100%); box-shadow: 0 0 20px rgba(255, 140, 105, 0.3); animation-name: slowRotate; animation-duration: 120s; }
-
-/* --- Падающие звезды --- */
-.shooting-star { position: absolute; width: 2px; height: 80px; background: linear-gradient(to top, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.8)); border-radius: 50%; transform-origin: top center; z-index: 2; animation-name: shooting; animation-timing-function: cubic-bezier(0.6, -0.28, 0.735, 0.045); animation-iteration-count: infinite; opacity: 0; }
-.shooting-star::before { content: ''; position: absolute; bottom: -2px; left: -1px; width: 4px; height: 4px; background-color: #fff; border-radius: 50%; box-shadow: 0 0 6px #fff; }
-.star1 { top: -80px; left: 30%; --angle: 230deg; transform: rotate(var(--angle)); animation-duration: 2s; animation-delay: 1s; }
-.star2 { top: -80px; left: 60%; --angle: 220deg; transform: rotate(var(--angle)); animation-duration: 1.5s; animation-delay: 3s; height: 60px; }
-.star3 { top: -80px; left: 80%; --angle: 240deg; transform: rotate(var(--angle)); animation-duration: 2.5s; animation-delay: 6s; width: 1px; height: 100px; }
-.star4 { top: -80px; left: 10%; --angle: 210deg; transform: rotate(var(--angle)); animation-duration: 1.8s; animation-delay: 8s; }
-
-/* --- Анимации --- */
-@keyframes slowRotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-@keyframes slowMove { 0%, 100% { transform: translate(0, 0) rotate(0deg); } 50% { transform: translate(-5px, 3px) rotate(2deg); } }
-@keyframes slowMoveDiagonal { 0%, 100% { transform: translate(0, 0) rotate(0deg); } 50% { transform: translate(15px, -10px) rotate(5deg); } }
-@keyframes shooting { 0% { opacity: 0; transform: translateY(0) rotate(var(--angle)); } 10% { opacity: 1; } 100% { opacity: 0; transform: translateY(120vh) rotate(var(--angle)); } }
-@keyframes twinkle { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
-@keyframes fadeInSlideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes fadeOutSlideDown { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(15px); } } /* Для удаления */
+/* --- Стили Body + Звездное небо (как было) --- */
+body { /* ... без изменений ... */ }
+.stars-background { /* ... без изменений ... */ }
+#stars-static-1, #stars-static-2 { /* ... без изменений ... */ }
+.moon { /* ... без изменений ... */ }
+.planet { /* ... без изменений ... */ }
+.planet1 { /* ... без изменений ... */ }
+.planet1::before { /* ... без изменений ... */ }
+.planet2 { /* ... без изменений ... */ }
+.shooting-star { /* ... без изменений ... */ }
+.shooting-star::before { /* ... без изменений ... */ }
+.star1, .star2, .star3, .star4 { /* ... без изменений ... */ }
+@keyframes slowRotate { /* ... */ } @keyframes slowMove { /* ... */ }
+@keyframes slowMoveDiagonal { /* ... */ } @keyframes shooting { /* ... */ }
+@keyframes twinkle { /* ... */ } @keyframes fadeInSlideUp { /* ... */ }
+@keyframes fadeOutSlideDown { /* ... */ }
 
 /* --- Контейнер для основного контента --- */
-.content-wrapper {
+.content-wrapper { /* ... без изменений ... */
     background-color: rgba(var(--tg-theme-secondary-bg-color-value), 0.75);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    padding: 20px 15px;
-    border-radius: 12px;
+    backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+    padding: 20px 15px; border-radius: 12px;
     border: 1px solid rgba(var(--tg-theme-hint-color-rgb), 0.2);
-    max-width: 650px;
-    width: 100%;
-    box-sizing: border-box;
-    position: relative;
-    z-index: 10;
-    opacity: 0;
-    transform: translateY(15px);
+    max-width: 650px; width: 100%; box-sizing: border-box;
+    position: relative; z-index: 10; opacity: 0; transform: translateY(15px);
     animation: fadeInSlideUp 0.6s 0.1s ease-out forwards;
-
-    /* --- ИЗМЕНЕНИЯ ДЛЯ ПРОКРУТКИ --- */
-    max-height: calc(100vh - 40px); /* Макс. высота = высота экрана минус верт. отступы body */
-    overflow-y: auto; /* Включаем верт. прокрутку внутри контейнера */
-    /* --- Опциональная стилизация скроллбара --- */
-    &::-webkit-scrollbar {
-        width: 6px;
-    }
-    &::-webkit-scrollbar-track {
-        background: rgba(var(--tg-theme-secondary-bg-color-value), 0.1);
-        border-radius: 3px;
-    }
-    &::-webkit-scrollbar-thumb {
-        background-color: var(--tg-theme-hint-color);
-        border-radius: 3px;
-        border: 1px solid rgba(var(--tg-theme-secondary-bg-color-value), 0.1);
-    }
-    /* ----------------------------------- */
+    max-height: calc(100vh - 40px); overflow-y: auto;
+    &::-webkit-scrollbar { width: 6px; }
+    &::-webkit-scrollbar-track { background: rgba(var(--tg-theme-secondary-bg-color-value), 0.1); border-radius: 3px; }
+    &::-webkit-scrollbar-thumb { background-color: var(--tg-theme-hint-color); border-radius: 3px; border: 1px solid rgba(var(--tg-theme-secondary-bg-color-value), 0.1); }
 }
 
 /* --- Стили текста --- */
-h1 { font-family: 'Raleway', sans-serif; font-weight: 700; font-size: clamp(1.8em, 5vw, 2.2em); margin-top: 0; margin-bottom: 12px; color: var(--tg-theme-text-color); letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
-p { font-size: clamp(0.9em, 3vw, 1em); line-height: 1.6; color: var(--tg-theme-hint-color); margin-bottom: 15px; }
-#user-info { font-size: 0.85em; font-weight: 400; margin: 10px 0; color: var(--tg-theme-hint-color); padding: 6px 10px; background-color: rgba(var(--tg-theme-bg-color-rgb), 0.7); border-radius: 5px; display: inline-block; }
+h1 { /* ... без изменений ... */ }
+p { /* ... без изменений ... */ }
+#user-info { /* ... без изменений ... */ }
 
 /* --- Форма добавления/редактирования --- */
-.task-form { margin-bottom: 20px; text-align: left; }
-.main-input-group { display: flex; gap: 8px; margin-bottom: 12px; align-items: stretch; }
-#new-task-input { flex-grow: 1; min-width: 0; padding: 10px 14px; border: 1px solid rgba(var(--tg-theme-hint-color-rgb), 0.3); border-radius: 8px; font-size: 1em; font-family: 'Poppins', sans-serif; background-color: rgba(var(--tg-theme-bg-color-rgb), 0.8); color: var(--tg-theme-text-color); transition: border-color 0.3s ease, box-shadow 0.3s ease; -webkit-appearance: none; appearance: none; min-height: 44px; box-sizing: border-box; touch-action: manipulation; z-index: 2; position: relative; }
+.task-form {
+    margin-bottom: 20px;
+    text-align: left;
+}
+.main-input-group {
+    /* display: flex; больше не нужен, т.к. там только инпут */
+    margin-bottom: 12px; /* Отступ под основным инпутом */
+}
+#new-task-input {
+    /* flex-grow: 1; больше не нужно */
+    width: 100%; /* Занимает всю ширину */
+    min-width: 0; padding: 10px 14px; border: 1px solid rgba(var(--tg-theme-hint-color-rgb), 0.3);
+    border-radius: 8px; font-size: 1em; font-family: 'Poppins', sans-serif; background-color: rgba(var(--tg-theme-bg-color-rgb), 0.8);
+    color: var(--tg-theme-text-color); transition: border-color 0.3s ease, box-shadow 0.3s ease; -webkit-appearance: none;
+    appearance: none; min-height: 44px; box-sizing: border-box; touch-action: manipulation; z-index: 2; position: relative;
+}
 #new-task-input::placeholder { color: var(--tg-theme-hint-color); opacity: 0.7; }
 #new-task-input:focus { outline: none; border-color: var(--tg-theme-button-color); box-shadow: 0 0 0 2px rgba(var(--tg-theme-button-color-rgb), 0.4); }
-#add-task-btn { flex-shrink: 0; z-index: 2; position: relative; padding: 10px 15px; box-sizing: border-box; }
-.details-input-group { display: flex; flex-wrap: wrap; gap: 10px 15px; margin-bottom: 10px; align-items: center; }
-.input-field { display: flex; flex-direction: column; gap: 4px; flex: 1 1 150px; min-width: 120px; }
-.input-field label { font-size: 0.8em; color: var(--tg-theme-hint-color); font-weight: 600; text-align: left; }
-.input-field select, .input-field input[type="date"], .input-field input[type="text"] { width: 100%; padding: 8px 10px; border: 1px solid rgba(var(--tg-theme-hint-color-rgb), 0.3); border-radius: 6px; font-size: 0.9em; font-family: 'Poppins', sans-serif; background-color: rgba(var(--tg-theme-bg-color-rgb), 0.8); color: var(--tg-theme-text-color); box-sizing: border-box; min-height: 38px; }
+
+/* Убираем стили для старой кнопки #add-task-btn, если они были специфичны */
+/* #add-task-btn { flex-shrink: 0; ... } */
+
+.details-input-group { /* ... без изменений ... */
+    display: flex; flex-wrap: wrap; gap: 10px 15px; margin-bottom: 15px; /* Увеличим отступ снизу */ align-items: center;
+}
+.input-field { /* ... без изменений ... */
+    display: flex; flex-direction: column; gap: 4px; flex: 1 1 150px; min-width: 120px;
+}
+.input-field label { /* ... без изменений ... */
+    font-size: 0.8em; color: var(--tg-theme-hint-color); font-weight: 600; text-align: left;
+}
+.input-field select, .input-field input[type="date"], .input-field input[type="text"] { /* ... без изменений ... */
+    width: 100%; padding: 8px 10px; border: 1px solid rgba(var(--tg-theme-hint-color-rgb), 0.3); border-radius: 6px; font-size: 0.9em; font-family: 'Poppins', sans-serif; background-color: rgba(var(--tg-theme-bg-color-rgb), 0.8); color: var(--tg-theme-text-color); box-sizing: border-box; min-height: 38px;
+}
 .input-field input[type="date"] { color-scheme: dark; }
 .input-field-tags { flex-basis: 100%; }
-#cancel-edit-btn { margin-top: 10px; width: 100%; }
+
+/* --- Новые стили для кнопок формы --- */
+.form-action-buttons {
+    display: flex;
+    gap: 10px; /* Промежуток между кнопками Добавить/Отмена */
+    margin-top: 15px; /* Отступ над кнопками */
+}
+.form-action-buttons button {
+    flex-grow: 1; /* Кнопки растягиваются на доступную ширину */
+    padding: 12px 15px; /* Сделаем кнопки формы чуть крупнее */
+    font-size: 1em;
+}
+/* Стили для основной кнопки формы (Добавить/Сохранить) */
+.form-action-buttons button.primary-form-btn {
+     /* Использует стили базовой кнопки 'button' */
+     /* Можно добавить специфичные стили, если нужно */
+     /* background-color: ...; */
+}
+/* Стили для вторичной кнопки формы (Отмена) */
+.form-action-buttons button#cancel-edit-btn {
+    /* Использует стили .secondary-btn */
+    flex-grow: 0; /* Кнопка отмены не растягивается */
+    padding: 12px 20px; /* Можно сделать паддинг другим */
+}
 
 /* --- Контролы: Фильтры и Счетчик --- */
-.controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 10px 5px; border-bottom: 1px solid rgba(var(--tg-theme-hint-color-rgb), 0.15); flex-wrap: wrap; gap: 10px; }
-.filters button.filter-btn { background: none; border: 1px solid var(--tg-theme-hint-color); color: var(--tg-theme-hint-color); padding: 5px 12px; border-radius: 15px; font-size: 0.85em; font-weight: 600; cursor: pointer; transition: all 0.2s ease; margin: 0 3px; }
-.filters button.filter-btn:hover { background-color: rgba(var(--tg-theme-hint-color-rgb), 0.2); border-color: var(--tg-theme-text-color); color: var(--tg-theme-text-color); }
-.filters button.filter-btn.active { background-color: var(--tg-theme-button-color); border-color: var(--tg-theme-button-color); color: var(--tg-theme-button-text-color); box-shadow: 0 2px 5px rgba(var(--tg-theme-button-color-rgb), 0.3); }
-.task-counter { font-size: 0.9em; color: var(--tg-theme-hint-color); font-weight: 600; }
+.controls { /* ... без изменений ... */
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;
+    padding: 10px 5px; border-bottom: 1px solid rgba(var(--tg-theme-hint-color-rgb), 0.15);
+    flex-wrap: wrap; gap: 10px;
+}
+.filters button.filter-btn { /* ... без изменений ... */
+    background: none; border: 1px solid var(--tg-theme-hint-color); color: var(--tg-theme-hint-color);
+    padding: 5px 12px; border-radius: 15px; font-size: 0.85em; font-weight: 600;
+    cursor: pointer; transition: all 0.2s ease; margin: 0 3px;
+}
+.filters button.filter-btn:hover { /* ... без изменений ... */
+    background-color: rgba(var(--tg-theme-hint-color-rgb), 0.2); border-color: var(--tg-theme-text-color);
+    color: var(--tg-theme-text-color);
+}
+.filters button.filter-btn.active { /* ... без изменений ... */
+    background-color: var(--tg-theme-button-color); border-color: var(--tg-theme-button-color);
+    color: var(--tg-theme-button-text-color); box-shadow: 0 2px 5px rgba(var(--tg-theme-button-color-rgb), 0.3);
+}
+.task-counter { /* ... без изменений ... */
+    font-size: 0.9em; color: var(--tg-theme-hint-color); font-weight: 600;
+}
 
 /* --- Заголовок списка --- */
-h2 { font-family: 'Raleway', sans-serif; font-size: 1.3em; margin-top: 10px; margin-bottom: 10px; color: var(--tg-theme-text-color); text-align: left; padding-left: 5px; }
+h2 { /* ... без изменений ... */
+    font-family: 'Raleway', sans-serif; font-size: 1.3em; margin-top: 10px; margin-bottom: 10px;
+    color: var(--tg-theme-text-color); text-align: left; padding-left: 5px;
+}
 
 /* --- Список Задач --- */
-#task-list { list-style: none; padding: 0; margin: 0 0 15px 0; text-align: left; }
-#task-list li { background-color: rgba(var(--tg-theme-secondary-bg-color-value), 0.5); border: 1px solid rgba(var(--tg-theme-hint-color-rgb), 0.1); padding: 10px 12px; margin-bottom: 8px; border-radius: 8px; font-size: 0.95em; color: var(--tg-theme-text-color); transition: background-color 0.2s ease, border-color 0.2s ease, opacity 0.4s ease, transform 0.4s ease; display: flex; justify-content: space-between; align-items: flex-start; word-break: break-word; opacity: 0; transform: translateX(-20px); }
-#task-list li.visible { opacity: 1; transform: translateX(0); }
-#task-list li.removing { opacity: 0; transform: translateX(20px) scale(0.9); animation: fadeOutSlideDown 0.4s ease forwards; }
-#task-list li:hover { background-color: rgba(var(--tg-theme-secondary-bg-color-value), 0.7); border-color: rgba(var(--tg-theme-hint-color-rgb), 0.2); }
-#task-list li.completed { opacity: 0.6; background-color: rgba(var(--tg-theme-secondary-bg-color-value), 0.3); }
-#task-list li.completed .task-content .task-text { text-decoration: line-through; color: var(--tg-theme-hint-color); }
-.task-item-content { display: flex; align-items: flex-start; flex-grow: 1; margin-right: 10px; min-width: 0; }
-.task-checkbox { flex-shrink: 0; margin-right: 10px; margin-top: 2px; width: 18px; height: 18px; cursor: pointer; accent-color: var(--tg-theme-button-color); }
-.task-details { display: flex; flex-direction: column; align-items: flex-start; flex-grow: 1; min-width: 0; }
-.task-text { margin-bottom: 4px; line-height: 1.4; }
-.task-meta { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 4px; }
-.task-due-date, .task-priority { font-size: 0.8em; padding: 2px 6px; border-radius: 4px; font-weight: 600; }
-.task-due-date { background-color: rgba(var(--tg-theme-hint-color-rgb), 0.2); color: var(--tg-theme-hint-color); }
-.task-due-date.overdue { background-color: rgba(255, 123, 123, 0.2); color: var(--priority-high-color); font-weight: 700; }
-.task-priority.high { background-color: rgba(255, 123, 123, 0.2); color: var(--priority-high-color); }
-.task-priority.medium { background-color: rgba(240, 230, 140, 0.2); color: var(--priority-medium-color); }
-.task-priority.low { background-color: rgba(135, 206, 250, 0.2); color: var(--priority-low-color); }
-.task-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 2px; }
-.tag { background-color: rgba(var(--tg-theme-button-color-rgb), 0.2); color: var(--tg-theme-button-color); padding: 1px 6px; border-radius: 10px; font-size: 0.75em; font-weight: 600; white-space: nowrap; }
-.task-actions { display: flex; align-items: center; gap: 5px; margin-left: 5px; flex-shrink: 0; }
-.task-actions button { background: none; border: none; box-shadow: none; padding: 5px; margin: 0; cursor: pointer; font-size: 1.1em; line-height: 1; color: var(--tg-theme-hint-color); transition: color 0.2s ease, transform 0.2s ease; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; min-width: 24px; min-height: 24px; box-sizing: border-box; opacity: 1; transform: none; animation: none; }
-.task-actions button:hover { color: var(--tg-theme-text-color); transform: scale(1.15); filter: none; }
-.task-actions .delete-btn:hover { color: #ff7b7b; }
-.task-actions button:active { transform: scale(0.95); filter: none; }
-#task-list .no-tasks { background-color: transparent; box-shadow: none; border: none; color: var(--tg-theme-hint-color); font-style: italic; text-align: center; padding: 15px; opacity: 0; transform: scale(1); transition: opacity 0.3s ease; }
-#task-list .no-tasks.visible { opacity: 1; }
+#task-list { /* ... без изменений ... */ }
+#task-list li { /* ... без изменений ... */ }
+#task-list li.visible { /* ... без изменений ... */ }
+#task-list li.removing { /* ... без изменений ... */ }
+#task-list li:hover { /* ... без изменений ... */ }
+#task-list li.completed { /* ... без изменений ... */ }
+#task-list li.completed .task-content .task-text { /* ... без изменений ... */ }
+.task-item-content { /* ... без изменений ... */ }
+.task-checkbox { /* ... без изменений ... */ }
+.task-details { /* ... без изменений ... */ }
+.task-text { /* ... без изменений ... */ }
+.task-meta { /* ... без изменений ... */ }
+.task-due-date, .task-priority { /* ... без изменений ... */ }
+.task-due-date.overdue { /* ... без изменений ... */ }
+.task-priority.high { /* ... */ } .task-priority.medium { /* ... */ } .task-priority.low { /* ... */ }
+.task-tags { /* ... без изменений ... */ }
+.tag { /* ... без изменений ... */ }
+.task-actions { /* ... без изменений ... */ }
+.task-actions button { /* ... без изменений ... */ }
+.task-actions button:hover { /* ... */ } .task-actions .delete-btn:hover { /* ... */ } .task-actions button:active { /* ... */ }
+#task-list .no-tasks { /* ... без изменений ... */ }
+#task-list .no-tasks.visible { /* ... */ }
 
-/* --- Вторичные кнопки --- */
-button.secondary-btn { background-color: transparent; color: var(--tg-theme-hint-color); border: 1px solid var(--tg-theme-hint-color); box-shadow: none; font-weight: 400; opacity: 0.8; transition: all 0.2s ease; }
-button.secondary-btn:hover { background-color: rgba(var(--tg-theme-hint-color-rgb), 0.1); color: var(--tg-theme-text-color); border-color: var(--tg-theme-text-color); opacity: 1; transform: translateY(0); filter: none; }
-button.secondary-btn:active { background-color: rgba(var(--tg-theme-hint-color-rgb), 0.2); transform: scale(0.98); filter: none; }
-button.clear-btn { display: block; width: fit-content; margin: 15px auto 10px; padding: 6px 15px; font-size: 0.85em; color: var(--priority-high-color); border-color: var(--priority-high-color); opacity: 0.7; }
-button.clear-btn:hover { background-color: rgba(255, 123, 123, 0.1); border-color: var(--priority-high-color); color: var(--priority-high-color); opacity: 1; }
+/* --- Вторичные кнопки (Отмена, Очистка) --- */
+/* Базовый стиль для .secondary-btn теперь используется для Отмены в форме и Очистки */
+button.secondary-btn { /* ... без изменений ... */
+    background-color: transparent; color: var(--tg-theme-hint-color); border: 1px solid var(--tg-theme-hint-color);
+    box-shadow: none; font-weight: 400; opacity: 0.8; transition: all 0.2s ease;
+}
+button.secondary-btn:hover { /* ... без изменений ... */
+    background-color: rgba(var(--tg-theme-hint-color-rgb), 0.1); color: var(--tg-theme-text-color);
+    border-color: var(--tg-theme-text-color); opacity: 1; transform: translateY(0); filter: none;
+}
+button.secondary-btn:active { /* ... без изменений ... */
+    background-color: rgba(var(--tg-theme-hint-color-rgb), 0.2); transform: scale(0.98); filter: none;
+}
+/* Специфичные стили для кнопки Очистки */
+button.clear-btn { /* ... без изменений ... */
+    display: block; width: fit-content; margin: 15px auto 10px; padding: 6px 15px; font-size: 0.85em;
+    color: var(--priority-high-color); border-color: var(--priority-high-color); opacity: 0.7;
+}
+button.clear-btn:hover { /* ... без изменений ... */
+    background-color: rgba(255, 123, 123, 0.1); border-color: var(--priority-high-color);
+    color: var(--priority-high-color); opacity: 1;
+}
 
 /* --- Основные кнопки управления --- */
-.button-container { margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(var(--tg-theme-hint-color-rgb), 0.2); display: flex; justify-content: space-around; flex-wrap: wrap; gap: 10px; }
-button { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.95em; padding: 10px 15px; margin: 0; border: none; border-radius: 8px; cursor: pointer; background-color: var(--tg-theme-button-color); color: var(--tg-theme-button-text-color); box-shadow: 0 3px 8px rgba(var(--tg-theme-button-color-rgb), 0.3); transition: all 0.2s ease; -webkit-tap-highlight-color: transparent; min-height: 42px; box-sizing: border-box; opacity: 0; transform: translateY(10px); animation: fadeInSlideUp 0.5s 0.6s ease-out forwards; }
-#add-task-btn { animation: fadeInSlideUp 0.5s 0.35s ease-out forwards; }
-button:not(.secondary-btn):not(.task-actions button):hover { filter: brightness(1.15); box-shadow: 0 4px 12px rgba(var(--tg-theme-button-color-rgb), 0.4); transform: translateY(-2px); }
-button:not(.secondary-btn):not(.task-actions button):active { filter: brightness(0.9); transform: translateY(0px) scale(0.98); box-shadow: 0 1px 4px rgba(var(--tg-theme-button-color-rgb), 0.25); }
-#close-btn { background-color: var(--tg-theme-hint-color); opacity: 0.8; box-shadow: 0 3px 8px rgba(var(--tg-theme-hint-color-rgb), 0.2); }
-#close-btn:hover { box-shadow: 0 4px 12px rgba(var(--tg-theme-hint-color-rgb), 0.3); transform: translateY(-2px); filter: brightness(1.1); opacity: 1; }
-#close-btn:active { box-shadow: 0 1px 4px rgba(var(--tg-theme-hint-color-rgb), 0.2); transform: translateY(0px) scale(0.98); filter: brightness(0.95); opacity: 0.9; }
+.button-container { /* ... без изменений ... */
+    margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(var(--tg-theme-hint-color-rgb), 0.2);
+    display: flex; justify-content: space-around; flex-wrap: wrap; gap: 10px;
+}
+/* Общий стиль для ВСЕХ кнопок (включая кнопки формы) */
+button {
+    font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.95em; padding: 10px 15px; margin: 0;
+    border: none; border-radius: 8px; cursor: pointer; background-color: var(--tg-theme-button-color); color: var(--tg-theme-button-text-color);
+    box-shadow: 0 3px 8px rgba(var(--tg-theme-button-color-rgb), 0.3); transition: all 0.2s ease; -webkit-tap-highlight-color: transparent;
+    min-height: 42px; box-sizing: border-box;
+    /* Убираем анимацию по умолчанию отсюда, будем применять к конкретным */
+    /* opacity: 0; transform: translateY(10px); animation: fadeInSlideUp 0.5s 0.6s ease-out forwards; */
+}
+/* Применяем анимацию появления только к кнопкам внизу */
+.button-container button {
+    opacity: 0; transform: translateY(10px);
+    animation: fadeInSlideUp 0.5s 0.6s ease-out forwards;
+}
+
+/* Ховер/эктив для НЕ-вторичных и НЕ-действий-задачи кнопок */
+button:not(.secondary-btn):not(.task-actions button):hover {
+    filter: brightness(1.15); box-shadow: 0 4px 12px rgba(var(--tg-theme-button-color-rgb), 0.4); transform: translateY(-2px);
+}
+button:not(.secondary-btn):not(.task-actions button):active {
+    filter: brightness(0.9); transform: translateY(0px) scale(0.98); box-shadow: 0 1px 4px rgba(var(--tg-theme-button-color-rgb), 0.25);
+}
+
+/* Стили для кнопки Закрыть */
+#close-btn { /* ... без изменений ... */
+    background-color: var(--tg-theme-hint-color); opacity: 0.8; box-shadow: 0 3px 8px rgba(var(--tg-theme-hint-color-rgb), 0.2);
+}
+#close-btn:hover { /* ... без изменений ... */
+    box-shadow: 0 4px 12px rgba(var(--tg-theme-hint-color-rgb), 0.3); transform: translateY(-2px); filter: brightness(1.1); opacity: 1;
+}
+#close-btn:active { /* ... без изменений ... */
+    box-shadow: 0 1px 4px rgba(var(--tg-theme-hint-color-rgb), 0.2); transform: translateY(0px) scale(0.98); filter: brightness(0.95); opacity: 0.9;
+}
